@@ -13,3 +13,11 @@ export type {
 } from './types.ts';
 
 export { createEmptyBoard, createInitialGameState } from './types.ts';
+
+export {
+  createBoard,
+  getCell,
+  setCell,
+  getEmptyCells,
+  cloneBoard,
+} from './board.ts';
