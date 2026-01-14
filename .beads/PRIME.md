@@ -51,7 +51,7 @@ git push -u origin <issue-id>         # Others can see you're working on it
 # ... implement feature, write tests ...
 
 # 6. Run quality gates (MUST pass)
-npm run build && npm run lint && npm test
+npm run build && npm run lint && npm test && npm run test:e2e
 
 # 7. Commit to feature branch
 git add <files>
@@ -125,7 +125,8 @@ Before committing, ALL must pass:
 ```bash
 npm run build     # TypeScript compilation
 npm run lint      # Code quality
-npm test          # Test suite
+npm test          # Unit/integration tests
+npm run test:e2e  # Playwright E2E tests
 ```
 
 ---
