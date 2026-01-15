@@ -27,7 +27,7 @@ export type GameMode = 'hvh' | 'hvc' | 'cvc';
 export type HumanPlayer = Player;
 
 /** AI difficulty levels */
-export type AIDifficulty = 'fun' | 'god';
+export type AIDifficulty = 'easy' | 'fun' | 'god';
 
 /** Current phase of the game */
 export type GamePhase = 'setup' | 'playing' | 'finished';

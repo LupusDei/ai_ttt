@@ -105,20 +105,22 @@ test.describe("Human vs Computer Mode", () => {
     ).toBeVisible();
   });
 
-  test("difficulty selector shows Fun and God options", async ({
+  test("difficulty selector shows Easy, Fun and God options", async ({
     page,
   }) => {
     await page.getByText("Human vs Computer").click();
 
-    // Check difficulty options
-    const funButton = page.getByText("Fun");
-    const impossibleButton = page.getByText("God");
+    // Check all difficulty options
+    const easyButton = page.getByRole("button", { name: "Easy" });
+    const funButton = page.getByRole("button", { name: "Fun" });
+    const godButton = page.getByRole("button", { name: "God" });
 
+    await expect(easyButton).toBeVisible();
     await expect(funButton).toBeVisible();
-    await expect(impossibleButton).toBeVisible();
+    await expect(godButton).toBeVisible();
 
-    // Click God to select it
-    await impossibleButton.click();
+    // Click Easy to select it
+    await easyButton.click();
 
     // Start game should still work
     await page.getByRole("button", { name: "Start Game" }).click();
