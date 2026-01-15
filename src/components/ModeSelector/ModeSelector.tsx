@@ -1,14 +1,12 @@
 import type { ReactElement } from 'react';
-
-/** Play mode options for the game */
-export type PlayMode = 'hvh' | 'hvc' | 'cvc';
+import type { GameMode } from '../../core/types';
 
 export interface ModeSelectorProps {
-  value: PlayMode;
-  onChange: (mode: PlayMode) => void;
+  value: GameMode;
+  onChange: (mode: GameMode) => void;
 }
 
-const modes: { value: PlayMode; label: string }[] = [
+const modes: { value: GameMode; label: string }[] = [
   { value: 'hvh', label: 'Human vs Human' },
   { value: 'hvc', label: 'Human vs Computer' },
   { value: 'cvc', label: 'Computer vs Computer' },
