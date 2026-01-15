@@ -1,16 +1,16 @@
 import type { AIStrategy } from './types.ts';
-import type { Board, Player, Position } from '../core/types.ts';
+import type { BoardGrid, Player, Position } from '../core/types.ts';
 import { getEmptyCells, setCell, checkWinner } from '../core/board.ts';
 
 /**
  * Finds a winning move for the given player if one exists
  */
-function findWinningMove(board: Board, player: Player): Position | null {
+function findWinningMove(board: BoardGrid, player: Player): Position | null {
   const emptyCells = getEmptyCells(board);
 
   for (const pos of emptyCells) {
-    const testBoard = setCell(board, pos, player);
-    if (checkWinner(testBoard) === player) {
+    const testBoardGrid = setCell(board, pos, player);
+    if (checkWinner(testBoardGrid) === player) {
       return pos;
     }
   }
@@ -30,7 +30,7 @@ export const funStrategy: AIStrategy = {
   name: 'Fun AI',
   difficulty: 'fun',
 
-  getMove(board: Board, player: Player): Position {
+  getMove(board: BoardGrid, player: Player): Position {
     const emptyCells = getEmptyCells(board);
 
     if (emptyCells.length === 0) {

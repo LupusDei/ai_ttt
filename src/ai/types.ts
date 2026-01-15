@@ -1,4 +1,4 @@
-import type { AIDifficulty, Board, Player, Position } from '../core/types.ts';
+import type { AIDifficulty, BoardGrid, Player, Position } from '../core/types.ts';
 
 /**
  * Interface for AI strategy implementations
@@ -16,5 +16,5 @@ export interface AIStrategy {
    * @param player - The player (X or O) to make a move for
    * @returns The position where the AI wants to place its mark
    */
-  getMove(board: Board, player: Player): Position;
+  getMove(board: BoardGrid, player: Player): Position;
 }

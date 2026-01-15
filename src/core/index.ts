@@ -1,9 +1,9 @@
 // Core game logic exports
 export type {
   Player,
-  Cell,
+  CellValue,
   Position,
-  Board,
+  BoardGrid,
   GameMode,
   HumanPlayer,
   AIDifficulty,

@@ -1,5 +1,5 @@
 import type { AIStrategy } from './types.ts';
-import type { Board, Player, Position } from '../core/types.ts';
+import type { BoardGrid, Player, Position } from '../core/types.ts';
 import { getEmptyCells, setCell, checkWinner, isDraw } from '../core/board.ts';
 
 /**
@@ -7,7 +7,7 @@ import { getEmptyCells, setCell, checkWinner, isDraw } from '../core/board.ts';
  * Returns the score of the board state for the maximizing player
  */
 function minimax(
-  board: Board,
+  board: BoardGrid,
   depth: number,
   isMaximizing: boolean,
   alpha: number,
@@ -36,8 +36,8 @@ function minimax(
   if (isMaximizing) {
     let maxScore = -Infinity;
     for (const pos of emptyCells) {
-      const newBoard = setCell(board, pos, aiPlayer);
-      const score = minimax(newBoard, depth + 1, false, alpha, beta, aiPlayer);
+      const newBoardGrid = setCell(board, pos, aiPlayer);
+      const score = minimax(newBoardGrid, depth + 1, false, alpha, beta, aiPlayer);
       maxScore = Math.max(maxScore, score);
       alpha = Math.max(alpha, score);
       if (beta <= alpha) {
@@ -48,8 +48,8 @@ function minimax(
   } else {
     let minScore = Infinity;
     for (const pos of emptyCells) {
-      const newBoard = setCell(board, pos, opponent);
-      const score = minimax(newBoard, depth + 1, true, alpha, beta, aiPlayer);
+      const newBoardGrid = setCell(board, pos, opponent);
+      const score = minimax(newBoardGrid, depth + 1, true, alpha, beta, aiPlayer);
       minScore = Math.min(minScore, score);
       beta = Math.min(beta, score);
       if (beta <= alpha) {
@@ -69,7 +69,7 @@ export const godStrategy: AIStrategy = {
   name: 'God AI',
   difficulty: 'god',
 
-  getMove(board: Board, player: Player): Position {
+  getMove(board: BoardGrid, player: Player): Position {
     const emptyCells = getEmptyCells(board);
 
     if (emptyCells.length === 0) {
@@ -85,8 +85,8 @@ export const godStrategy: AIStrategy = {
     let bestScore = -Infinity;
 
     for (const pos of emptyCells) {
-      const newBoard = setCell(board, pos, player);
-      const score = minimax(newBoard, 0, false, -Infinity, Infinity, player);
+      const newBoardGrid = setCell(board, pos, player);
+      const score = minimax(newBoardGrid, 0, false, -Infinity, Infinity, player);
 
       if (score > bestScore) {
         bestScore = score;

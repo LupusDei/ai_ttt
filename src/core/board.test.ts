@@ -10,7 +10,7 @@ import {
   isBoardFull,
   isDraw,
 } from './board.ts';
-import type { Board } from './types.ts';
+import type { BoardGrid } from './types.ts';
 
 describe('createBoard', () => {
   it('creates a 3x3 empty board', () => {
@@ -27,7 +27,7 @@ describe('createBoard', () => {
 
 describe('getCell', () => {
   it('returns the cell value at the given position', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', null],
       [null, 'X', null],
       ['O', null, 'X'],
@@ -56,7 +56,7 @@ describe('setCell', () => {
   });
 
   it('can set a cell to null', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', null, null],
       [null, null, null],
       [null, null, null],
@@ -74,7 +74,7 @@ describe('getEmptyCells', () => {
   });
 
   it('returns correct positions for a partially filled board', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', null],
       [null, 'X', null],
       ['O', null, 'X'],
@@ -88,7 +88,7 @@ describe('getEmptyCells', () => {
   });
 
   it('returns empty array for a full board', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', 'X'],
       ['O', 'X', 'O'],
       ['O', 'X', 'O'],
@@ -100,7 +100,7 @@ describe('getEmptyCells', () => {
 
 describe('cloneBoard', () => {
   it('creates a deep copy of the board', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', null],
       [null, 'X', null],
       ['O', null, 'X'],
@@ -111,7 +111,7 @@ describe('cloneBoard', () => {
   });
 
   it('modifications to clone do not affect original', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', null, null],
       [null, null, null],
       [null, null, null],
@@ -130,7 +130,7 @@ describe('checkWinner', () => {
   });
 
   it('returns null for board with no winner', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', 'X'],
       ['X', 'O', 'O'],
       ['O', 'X', 'X'],
@@ -140,7 +140,7 @@ describe('checkWinner', () => {
 
   // Row wins
   it('detects X winning on row 0', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'X', 'X'],
       ['O', 'O', null],
       [null, null, null],
@@ -149,7 +149,7 @@ describe('checkWinner', () => {
   });
 
   it('detects O winning on row 1', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'X', null],
       ['O', 'O', 'O'],
       ['X', null, null],
@@ -158,7 +158,7 @@ describe('checkWinner', () => {
   });
 
   it('detects X winning on row 2', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['O', 'O', null],
       [null, null, null],
       ['X', 'X', 'X'],
@@ -168,7 +168,7 @@ describe('checkWinner', () => {
 
   // Column wins
   it('detects X winning on column 0', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', null],
       ['X', 'O', null],
       ['X', null, null],
@@ -177,7 +177,7 @@ describe('checkWinner', () => {
   });
 
   it('detects O winning on column 1', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', null],
       [null, 'O', 'X'],
       ['X', 'O', null],
@@ -186,7 +186,7 @@ describe('checkWinner', () => {
   });
 
   it('detects X winning on column 2', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['O', 'O', 'X'],
       [null, null, 'X'],
       [null, null, 'X'],
@@ -196,7 +196,7 @@ describe('checkWinner', () => {
 
   // Diagonal wins
   it('detects X winning on main diagonal', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', null],
       ['O', 'X', null],
       [null, null, 'X'],
@@ -205,7 +205,7 @@ describe('checkWinner', () => {
   });
 
   it('detects O winning on anti-diagonal', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'X', 'O'],
       [null, 'O', null],
       ['O', null, 'X'],
@@ -221,7 +221,7 @@ describe('getWinningLine', () => {
   });
 
   it('returns null for board with no winner', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', 'X'],
       ['X', 'O', 'O'],
       ['O', 'X', 'X'],
@@ -230,7 +230,7 @@ describe('getWinningLine', () => {
   });
 
   it('returns winning line positions for row win', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'X', 'X'],
       ['O', 'O', null],
       [null, null, null],
@@ -243,7 +243,7 @@ describe('getWinningLine', () => {
   });
 
   it('returns winning line positions for diagonal win', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', null],
       ['O', 'X', null],
       [null, null, 'X'],
@@ -263,7 +263,7 @@ describe('isBoardFull', () => {
   });
 
   it('returns false for partially filled board', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', null],
       [null, 'X', null],
       ['O', null, 'X'],
@@ -272,7 +272,7 @@ describe('isBoardFull', () => {
   });
 
   it('returns true for full board', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', 'X'],
       ['O', 'X', 'O'],
       ['O', 'X', 'O'],
@@ -288,7 +288,7 @@ describe('isDraw', () => {
   });
 
   it('returns false for board with winner', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'X', 'X'],
       ['O', 'O', null],
       [null, null, null],
@@ -297,7 +297,7 @@ describe('isDraw', () => {
   });
 
   it('returns false for full board with winner', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'X', 'X'],
       ['O', 'O', 'X'],
       ['X', 'O', 'O'],
@@ -306,7 +306,7 @@ describe('isDraw', () => {
   });
 
   it('returns true for full board with no winner (draw)', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', 'X'],
       ['X', 'O', 'O'],
       ['O', 'X', 'X'],
@@ -315,7 +315,7 @@ describe('isDraw', () => {
   });
 
   it('returns false for partially filled board with no winner', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', null],
       [null, 'X', null],
       ['O', null, null],
