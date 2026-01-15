@@ -100,3 +100,17 @@ export function getWinningLine(board: Board): Position[] | null {
   }
   return null;
 }
+
+/**
+ * Checks if the board is completely filled
+ */
+export function isBoardFull(board: Board): boolean {
+  return getEmptyCells(board).length === 0;
+}
+
+/**
+ * Checks if the game is a draw (board full with no winner)
+ */
+export function isDraw(board: Board): boolean {
+  return isBoardFull(board) && checkWinner(board) === null;
+}
