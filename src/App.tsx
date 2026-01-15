@@ -13,7 +13,18 @@ import {
 import './App.css';
 
 function App(): ReactElement {
-  const { state, startGame, makeMove, resetGame, isPlaying, isFinished, isAITurn } = useGame();
+  const {
+    state,
+    startGame,
+    makeMove,
+    resetGame,
+    isPlaying,
+    isFinished,
+    isAITurn,
+    isCvC,
+    isPaused,
+    togglePause,
+  } = useGame();
 
   // Setup form state
   const [selectedMode, setSelectedMode] = useState<GameMode>('hvh');
@@ -42,6 +53,14 @@ function App(): ReactElement {
 
   const showPlayerSelector = selectedMode === 'hvc';
   const showDifficultySelector = selectedMode === 'hvc' || selectedMode === 'cvc';
+
+  // Get AI thinking message with visual distinction for CvC mode
+  const getAIThinkingMessage = (): string => {
+    if (isCvC) {
+      return `AI ${state.currentPlayer} is thinking...`;
+    }
+    return 'AI is thinking...';
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
@@ -75,6 +94,23 @@ function App(): ReactElement {
             phase={state.phase}
           />
 
+          {/* CvC mode indicator */}
+          {isCvC && isPlaying && (
+            <div className="text-sm text-gray-400">
+              <span
+                className={`font-bold ${state.currentPlayer === 'X' ? 'text-blue-400' : 'text-red-400'}`}
+              >
+                AI {state.currentPlayer}
+              </span>{' '}
+              vs{' '}
+              <span
+                className={`font-bold ${state.currentPlayer === 'X' ? 'text-red-400' : 'text-blue-400'}`}
+              >
+                AI {state.currentPlayer === 'X' ? 'O' : 'X'}
+              </span>
+            </div>
+          )}
+
           <Board
             board={state.board}
             onCellClick={handleCellClick}
@@ -82,8 +118,29 @@ function App(): ReactElement {
             disabled={!isPlaying || isAITurn}
           />
 
-          {isAITurn && (
-            <div className="text-gray-400 text-sm animate-pulse">AI is thinking...</div>
+          {/* AI thinking indicator */}
+          {isAITurn && !isPaused && (
+            <div className="text-gray-400 text-sm animate-pulse">{getAIThinkingMessage()}</div>
+          )}
+
+          {/* CvC pause/resume controls */}
+          {isCvC && isPlaying && (
+            <button
+              type="button"
+              onClick={togglePause}
+              className={`px-6 py-2 font-bold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 ${
+                isPaused
+                  ? 'bg-green-600 hover:bg-green-700 text-white focus:ring-green-500'
+                  : 'bg-yellow-600 hover:bg-yellow-700 text-white focus:ring-yellow-500'
+              }`}
+            >
+              {isPaused ? 'Resume' : 'Pause'}
+            </button>
+          )}
+
+          {/* Paused indicator */}
+          {isCvC && isPaused && isPlaying && (
+            <div className="text-yellow-400 text-sm font-medium">Game Paused</div>
           )}
 
           {isFinished && (

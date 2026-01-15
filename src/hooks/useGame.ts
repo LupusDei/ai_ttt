@@ -1,4 +1,4 @@
-import { useReducer, useCallback, useEffect, useRef } from 'react';
+import { useReducer, useCallback, useEffect, useRef, useState } from 'react';
 import type {
   GameState,
   GameMode,
@@ -109,16 +109,24 @@ export interface UseGameReturn {
   isFinished: boolean;
   /** Whether it's currently the human player's turn (in HvC mode) */
   isHumanTurn: boolean;
-  /** Whether it's currently the AI's turn (in HvC mode) */
+  /** Whether it's currently the AI's turn (in HvC or CvC mode) */
   isAITurn: boolean;
+  /** Whether the game is in Computer vs Computer mode */
+  isCvC: boolean;
+  /** Whether CvC auto-play is paused */
+  isPaused: boolean;
+  /** Toggle pause state for CvC mode */
+  togglePause: () => void;
 }
 
 /** Hook for managing tic-tac-toe game state */
 export function useGame(aiDelay: number = DEFAULT_AI_DELAY): UseGameReturn {
   const [state, dispatch] = useReducer(gameReducer, createInitialGameState());
+  const [isPaused, setIsPaused] = useState(false);
   const aiMoveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const startGame = useCallback((config: GameConfig) => {
+    setIsPaused(false);
     dispatch({ type: 'START_GAME', config });
   }, []);
 
@@ -132,20 +140,31 @@ export function useGame(aiDelay: number = DEFAULT_AI_DELAY): UseGameReturn {
       clearTimeout(aiMoveTimeoutRef.current);
       aiMoveTimeoutRef.current = null;
     }
+    setIsPaused(false);
     dispatch({ type: 'RESET_GAME' });
+  }, []);
+
+  const togglePause = useCallback(() => {
+    setIsPaused((prev) => !prev);
   }, []);
 
   const isPlaying = state.phase === 'playing';
   const isFinished = state.phase === 'finished';
+  const isCvC = state.mode === 'cvc';
   const isHumanTurn =
     isPlaying && state.mode === 'hvc' && state.currentPlayer === state.humanPlayer;
   const isAITurn =
     isPlaying &&
     (state.mode === 'cvc' || (state.mode === 'hvc' && state.currentPlayer !== state.humanPlayer));
 
-  // Auto-trigger AI moves in HvC and CvC modes
+  // Auto-trigger AI moves in HvC and CvC modes (respects pause in CvC)
   useEffect(() => {
     if (!isAITurn) {
+      return;
+    }
+
+    // In CvC mode, respect the pause state
+    if (isCvC && isPaused) {
       return;
     }
 
@@ -163,7 +182,7 @@ export function useGame(aiDelay: number = DEFAULT_AI_DELAY): UseGameReturn {
         aiMoveTimeoutRef.current = null;
       }
     };
-  }, [isAITurn, state.board, state.currentPlayer, state.difficulty, aiDelay]);
+  }, [isAITurn, isCvC, isPaused, state.board, state.currentPlayer, state.difficulty, aiDelay]);
 
   return {
     state,
@@ -174,5 +193,8 @@ export function useGame(aiDelay: number = DEFAULT_AI_DELAY): UseGameReturn {
     isFinished,
     isHumanTurn,
     isAITurn,
+    isCvC,
+    isPaused,
+    togglePause,
   };
 }

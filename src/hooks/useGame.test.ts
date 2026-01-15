@@ -397,4 +397,238 @@ describe('useGame', () => {
       expect(result.current.state.board.flat().every((c) => c === null)).toBe(true);
     });
   });
+
+  describe('CvC mode', () => {
+    it('isCvC is true in CvC mode', () => {
+      const { result } = renderHook(() => useGame(100));
+
+      act(() => {
+        result.current.startGame({
+          mode: 'cvc',
+          humanPlayer: 'X',
+          difficulty: 'fun',
+        });
+      });
+
+      expect(result.current.isCvC).toBe(true);
+    });
+
+    it('isCvC is false in HvH mode', () => {
+      const { result } = renderHook(() => useGame(100));
+
+      act(() => {
+        result.current.startGame({
+          mode: 'hvh',
+          humanPlayer: 'X',
+          difficulty: 'fun',
+        });
+      });
+
+      expect(result.current.isCvC).toBe(false);
+    });
+
+    it('isAITurn is true for both players in CvC mode', () => {
+      const { result } = renderHook(() => useGame(100));
+
+      act(() => {
+        result.current.startGame({
+          mode: 'cvc',
+          humanPlayer: 'X',
+          difficulty: 'fun',
+        });
+      });
+
+      // X starts, should be AI turn
+      expect(result.current.isAITurn).toBe(true);
+      expect(result.current.state.currentPlayer).toBe('X');
+
+      // Let AI make move
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+
+      // O's turn, should also be AI turn
+      expect(result.current.isAITurn).toBe(true);
+      expect(result.current.state.currentPlayer).toBe('O');
+    });
+
+    it('AI plays automatically in CvC mode', () => {
+      const { result } = renderHook(() => useGame(100));
+
+      act(() => {
+        result.current.startGame({
+          mode: 'cvc',
+          humanPlayer: 'X',
+          difficulty: 'fun',
+        });
+      });
+
+      // Wait for first AI move
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+
+      const filledAfterFirst = result.current.state.board.flat().filter((c) => c !== null).length;
+      expect(filledAfterFirst).toBe(1);
+
+      // Wait for second AI move
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+
+      const filledAfterSecond = result.current.state.board.flat().filter((c) => c !== null).length;
+      expect(filledAfterSecond).toBe(2);
+    });
+
+    it('isPaused starts as false', () => {
+      const { result } = renderHook(() => useGame(100));
+
+      act(() => {
+        result.current.startGame({
+          mode: 'cvc',
+          humanPlayer: 'X',
+          difficulty: 'fun',
+        });
+      });
+
+      expect(result.current.isPaused).toBe(false);
+    });
+
+    it('togglePause toggles the paused state', () => {
+      const { result } = renderHook(() => useGame(100));
+
+      act(() => {
+        result.current.startGame({
+          mode: 'cvc',
+          humanPlayer: 'X',
+          difficulty: 'fun',
+        });
+      });
+
+      expect(result.current.isPaused).toBe(false);
+
+      act(() => {
+        result.current.togglePause();
+      });
+
+      expect(result.current.isPaused).toBe(true);
+
+      act(() => {
+        result.current.togglePause();
+      });
+
+      expect(result.current.isPaused).toBe(false);
+    });
+
+    it('pauses AI moves when isPaused is true in CvC mode', () => {
+      const { result } = renderHook(() => useGame(100));
+
+      act(() => {
+        result.current.startGame({
+          mode: 'cvc',
+          humanPlayer: 'X',
+          difficulty: 'fun',
+        });
+      });
+
+      // Pause immediately
+      act(() => {
+        result.current.togglePause();
+      });
+
+      expect(result.current.isPaused).toBe(true);
+
+      // Advance timers - should not make any moves
+      act(() => {
+        vi.advanceTimersByTime(200);
+      });
+
+      const filledCells = result.current.state.board.flat().filter((c) => c !== null).length;
+      expect(filledCells).toBe(0);
+    });
+
+    it('resumes AI moves when unpaused in CvC mode', () => {
+      const { result } = renderHook(() => useGame(100));
+
+      act(() => {
+        result.current.startGame({
+          mode: 'cvc',
+          humanPlayer: 'X',
+          difficulty: 'fun',
+        });
+      });
+
+      // Pause immediately
+      act(() => {
+        result.current.togglePause();
+      });
+
+      // Advance timers - should not make any moves
+      act(() => {
+        vi.advanceTimersByTime(200);
+      });
+
+      const filledWhilePaused = result.current.state.board.flat().filter((c) => c !== null).length;
+      expect(filledWhilePaused).toBe(0);
+
+      // Resume
+      act(() => {
+        result.current.togglePause();
+      });
+
+      // Wait for AI move
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+
+      const filledAfterResume = result.current.state.board.flat().filter((c) => c !== null).length;
+      expect(filledAfterResume).toBe(1);
+    });
+
+    it('startGame resets pause state', () => {
+      const { result } = renderHook(() => useGame(100));
+
+      act(() => {
+        result.current.startGame({
+          mode: 'cvc',
+          humanPlayer: 'X',
+          difficulty: 'fun',
+        });
+        result.current.togglePause();
+      });
+
+      expect(result.current.isPaused).toBe(true);
+
+      act(() => {
+        result.current.startGame({
+          mode: 'cvc',
+          humanPlayer: 'X',
+          difficulty: 'fun',
+        });
+      });
+
+      expect(result.current.isPaused).toBe(false);
+    });
+
+    it('resetGame resets pause state', () => {
+      const { result } = renderHook(() => useGame(100));
+
+      act(() => {
+        result.current.startGame({
+          mode: 'cvc',
+          humanPlayer: 'X',
+          difficulty: 'fun',
+        });
+        result.current.togglePause();
+      });
+
+      expect(result.current.isPaused).toBe(true);
+
+      act(() => {
+        result.current.resetGame();
+      });
+
+      expect(result.current.isPaused).toBe(false);
+    });
+  });
 });
