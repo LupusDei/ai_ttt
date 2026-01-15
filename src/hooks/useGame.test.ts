@@ -39,7 +39,7 @@ describe('useGame', () => {
         result.current.startGame({
           mode: 'hvh',
           humanPlayer: 'X',
-          difficulty: 'medium',
+          difficulty: 'fun',
         });
       });
 
@@ -54,13 +54,13 @@ describe('useGame', () => {
         result.current.startGame({
           mode: 'hvc',
           humanPlayer: 'O',
-          difficulty: 'hard',
+          difficulty: 'god',
         });
       });
 
       expect(result.current.state.mode).toBe('hvc');
       expect(result.current.state.humanPlayer).toBe('O');
-      expect(result.current.state.difficulty).toBe('hard');
+      expect(result.current.state.difficulty).toBe('god');
     });
 
     it('resets board when starting new game', () => {
@@ -70,7 +70,7 @@ describe('useGame', () => {
         result.current.startGame({
           mode: 'hvh',
           humanPlayer: 'X',
-          difficulty: 'medium',
+          difficulty: 'fun',
         });
         result.current.makeMove({ row: 0, col: 0 });
       });
@@ -79,7 +79,7 @@ describe('useGame', () => {
         result.current.startGame({
           mode: 'hvh',
           humanPlayer: 'X',
-          difficulty: 'medium',
+          difficulty: 'fun',
         });
       });
 
@@ -96,7 +96,7 @@ describe('useGame', () => {
         result.current.startGame({
           mode: 'hvh',
           humanPlayer: 'X',
-          difficulty: 'medium',
+          difficulty: 'fun',
         });
       });
 
@@ -114,7 +114,7 @@ describe('useGame', () => {
         result.current.startGame({
           mode: 'hvh',
           humanPlayer: 'X',
-          difficulty: 'medium',
+          difficulty: 'fun',
         });
       });
 
@@ -134,7 +134,7 @@ describe('useGame', () => {
         result.current.startGame({
           mode: 'hvh',
           humanPlayer: 'X',
-          difficulty: 'medium',
+          difficulty: 'fun',
         });
         result.current.makeMove({ row: 0, col: 0 });
       });
@@ -166,7 +166,7 @@ describe('useGame', () => {
         result.current.startGame({
           mode: 'hvh',
           humanPlayer: 'X',
-          difficulty: 'medium',
+          difficulty: 'fun',
         });
       });
 
@@ -204,7 +204,7 @@ describe('useGame', () => {
         result.current.startGame({
           mode: 'hvh',
           humanPlayer: 'X',
-          difficulty: 'medium',
+          difficulty: 'fun',
         });
       });
 
@@ -241,7 +241,7 @@ describe('useGame', () => {
         result.current.startGame({
           mode: 'hvh',
           humanPlayer: 'X',
-          difficulty: 'medium',
+          difficulty: 'fun',
         });
         result.current.makeMove({ row: 0, col: 0 });
       });
@@ -264,7 +264,7 @@ describe('useGame', () => {
         result.current.startGame({
           mode: 'hvc',
           humanPlayer: 'X',
-          difficulty: 'medium',
+          difficulty: 'fun',
         });
       });
 
@@ -279,7 +279,7 @@ describe('useGame', () => {
         result.current.startGame({
           mode: 'hvc',
           humanPlayer: 'X',
-          difficulty: 'medium',
+          difficulty: 'fun',
         });
         result.current.makeMove({ row: 0, col: 0 });
       });
@@ -295,7 +295,7 @@ describe('useGame', () => {
         result.current.startGame({
           mode: 'hvh',
           humanPlayer: 'X',
-          difficulty: 'medium',
+          difficulty: 'fun',
         });
       });
 

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import type { AIStrategy, AIDifficultyLevel } from './types.ts';
-import type { Board } from '../core/types.ts';
+import type { AIStrategy } from './types.ts';
+import type { AIDifficulty, Board } from '../core/types.ts';
 import { createEmptyBoard } from '../core/types.ts';
 
 describe('AIStrategy interface', () => {
@@ -61,14 +61,14 @@ describe('AIStrategy interface', () => {
   });
 });
 
-describe('AIDifficultyLevel type', () => {
+describe('AIDifficulty type', () => {
   it('accepts fun difficulty', () => {
-    const difficulty: AIDifficultyLevel = 'fun';
+    const difficulty: AIDifficulty = 'fun';
     expect(difficulty).toBe('fun');
   });
 
   it('accepts god difficulty', () => {
-    const difficulty: AIDifficultyLevel = 'god';
+    const difficulty: AIDifficulty = 'god';
     expect(difficulty).toBe('god');
   });
 });

@@ -1,11 +1,4 @@
-import type { Board, Player, Position } from '../core/types.ts';
-
-/**
- * AI difficulty levels for the game
- * - 'fun': Makes intentional mistakes, beatable AI
- * - 'god': Perfect play using minimax, unbeatable AI
- */
-export type AIDifficultyLevel = 'fun' | 'god';
+import type { AIDifficulty, Board, Player, Position } from '../core/types.ts';
 
 /**
  * Interface for AI strategy implementations
@@ -15,7 +8,7 @@ export interface AIStrategy {
   readonly name: string;
 
   /** The difficulty level this strategy represents */
-  readonly difficulty: AIDifficultyLevel;
+  readonly difficulty: AIDifficulty;
 
   /**
    * Calculates the best move for the given player on the board

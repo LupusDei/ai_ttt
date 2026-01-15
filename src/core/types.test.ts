@@ -40,7 +40,7 @@ describe('createInitialGameState', () => {
     expect(state.phase).toBe('setup');
     expect(state.mode).toBe('hvh');
     expect(state.humanPlayer).toBe('X');
-    expect(state.difficulty).toBe('medium');
+    expect(state.difficulty).toBe('fun');
     expect(state.result).toBeNull();
   });
 
@@ -79,7 +79,7 @@ describe('Type definitions', () => {
       phase: 'playing',
       mode: 'hvc',
       humanPlayer: 'X',
-      difficulty: 'hard',
+      difficulty: 'god',
       result: null,
     };
     expect(validState).toBeDefined();
@@ -96,7 +96,7 @@ describe('Type definitions', () => {
       phase: 'finished',
       mode: 'hvh',
       humanPlayer: 'X',
-      difficulty: 'medium',
+      difficulty: 'fun',
       result: {
         winner: 'X',
         winningLine: [
@@ -123,7 +123,7 @@ describe('Type definitions', () => {
       phase: 'finished',
       mode: 'hvh',
       humanPlayer: 'X',
-      difficulty: 'medium',
+      difficulty: 'fun',
       result: {
         winner: null,
         winningLine: null,

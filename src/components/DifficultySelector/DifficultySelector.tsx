@@ -1,9 +1,9 @@
 import type React from 'react';
-import type { AIDifficultyLevel } from '../../ai/types.ts';
+import type { AIDifficulty } from '../../core/types.ts';
 
 interface DifficultySelectorProps {
-  value: AIDifficultyLevel;
-  onChange: (difficulty: AIDifficultyLevel) => void;
+  value: AIDifficulty;
+  onChange: (difficulty: AIDifficulty) => void;
 }
 
 export function DifficultySelector({

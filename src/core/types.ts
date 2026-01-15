@@ -24,7 +24,7 @@ export type GameMode = 'hvh' | 'hvc' | 'cvc';
 export type HumanPlayer = Player;
 
 /** AI difficulty levels */
-export type AIDifficulty = 'easy' | 'medium' | 'hard';
+export type AIDifficulty = 'fun' | 'god';
 
 /** Current phase of the game */
 export type GamePhase = 'setup' | 'playing' | 'finished';
@@ -64,7 +64,7 @@ export function createInitialGameState(): GameState {
     phase: 'setup',
     mode: 'hvh',
     humanPlayer: 'X',
-    difficulty: 'medium',
+    difficulty: 'fun',
     result: null,
   };
 }
