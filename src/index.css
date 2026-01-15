@@ -1,5 +1,40 @@
 @import "tailwindcss";
 
+/* Custom animations for game cells */
+@keyframes pop-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-win {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgb(34 197 94 / 0.5);
+  }
+  50% {
+    opacity: 0.9;
+    box-shadow: 0 0 20px 5px rgb(34 197 94 / 0.5);
+  }
+}
+
+.animate-pop-in {
+  animation: pop-in 0.3s ease-out;
+}
+
+.animate-pulse-win {
+  animation: pulse-win 1.5s ease-in-out infinite;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
