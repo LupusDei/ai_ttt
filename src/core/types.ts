@@ -20,7 +20,7 @@ export type Board = [[Cell, Cell, Cell], [Cell, Cell, Cell], [Cell, Cell, Cell]]
 /** Game mode options */
 export type GameMode = 'hvh' | 'hvc' | 'cvc';
 
-/** Which player the human controls in PvE mode */
+/** Which player the human controls in HvC mode */
 export type HumanPlayer = Player;
 
 /** AI difficulty levels */

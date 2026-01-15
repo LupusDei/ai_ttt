@@ -1,8 +1,16 @@
 import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { useGame } from './useGame';
 
 describe('useGame', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   describe('initial state', () => {
     it('starts with setup phase', () => {
       const { result } = renderHook(() => useGame());
@@ -301,6 +309,92 @@ describe('useGame', () => {
 
       expect(result.current.isHumanTurn).toBe(false);
       expect(result.current.isAITurn).toBe(false);
+    });
+  });
+
+  describe('AI integration', () => {
+    it('AI makes move automatically after human move in HvC mode', () => {
+      const { result } = renderHook(() => useGame(100)); // 100ms delay for faster tests
+
+      act(() => {
+        result.current.startGame({
+          mode: 'hvc',
+          humanPlayer: 'X',
+          difficulty: 'fun',
+        });
+      });
+
+      // Human makes first move
+      act(() => {
+        result.current.makeMove({ row: 1, col: 1 }); // X plays center
+      });
+
+      expect(result.current.state.board[1][1]).toBe('X');
+      expect(result.current.isAITurn).toBe(true);
+
+      // Wait for AI move
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+
+      // AI should have made a move
+      const filledCells = result.current.state.board.flat().filter((c) => c !== null);
+      expect(filledCells.length).toBe(2);
+      expect(result.current.state.currentPlayer).toBe('X'); // Back to human's turn
+    });
+
+    it('AI plays first when human is O in HvC mode', () => {
+      const { result } = renderHook(() => useGame(100));
+
+      act(() => {
+        result.current.startGame({
+          mode: 'hvc',
+          humanPlayer: 'O',
+          difficulty: 'fun',
+        });
+      });
+
+      // X (AI) should play first
+      expect(result.current.isAITurn).toBe(true);
+
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+
+      // AI should have made a move
+      const filledCells = result.current.state.board.flat().filter((c) => c !== null);
+      expect(filledCells.length).toBe(1);
+      expect(result.current.state.currentPlayer).toBe('O'); // Human's turn
+      expect(result.current.isHumanTurn).toBe(true);
+    });
+
+    it('clears pending AI move on reset', () => {
+      const { result } = renderHook(() => useGame(100));
+
+      act(() => {
+        result.current.startGame({
+          mode: 'hvc',
+          humanPlayer: 'X',
+          difficulty: 'fun',
+        });
+        result.current.makeMove({ row: 1, col: 1 }); // Trigger AI turn
+      });
+
+      expect(result.current.isAITurn).toBe(true);
+
+      // Reset before AI can move
+      act(() => {
+        result.current.resetGame();
+      });
+
+      // Advance timers - AI move should be cancelled
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+
+      // Should be back to setup state with empty board
+      expect(result.current.state.phase).toBe('setup');
+      expect(result.current.state.board.flat().every((c) => c === null)).toBe(true);
     });
   });
 });
