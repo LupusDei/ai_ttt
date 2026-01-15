@@ -39,6 +39,32 @@ describe('getCell', () => {
     expect(getCell(board, { row: 1, col: 1 })).toBe('X');
     expect(getCell(board, { row: 2, col: 0 })).toBe('O');
   });
+
+  it('throws error for negative row', () => {
+    const board = createEmptyBoard();
+    expect(() => getCell(board, { row: -1, col: 0 })).toThrow('out of bounds');
+  });
+
+  it('throws error for negative column', () => {
+    const board = createEmptyBoard();
+    expect(() => getCell(board, { row: 0, col: -1 })).toThrow('out of bounds');
+  });
+
+  it('throws error for row >= BOARD_SIZE', () => {
+    const board = createEmptyBoard();
+    expect(() => getCell(board, { row: 3, col: 0 })).toThrow('out of bounds');
+  });
+
+  it('throws error for column >= BOARD_SIZE', () => {
+    const board = createEmptyBoard();
+    expect(() => getCell(board, { row: 0, col: 3 })).toThrow('out of bounds');
+  });
+
+  it('accepts boundary positions (0,0) and (2,2)', () => {
+    const board = createEmptyBoard();
+    expect(() => getCell(board, { row: 0, col: 0 })).not.toThrow();
+    expect(() => getCell(board, { row: 2, col: 2 })).not.toThrow();
+  });
 });
 
 describe('setCell', () => {
@@ -64,6 +90,32 @@ describe('setCell', () => {
     ];
     const newBoard = setCell(board, { row: 0, col: 0 }, null);
     expect(getCell(newBoard, { row: 0, col: 0 })).toBeNull();
+  });
+
+  it('throws error for negative row', () => {
+    const board = createEmptyBoard();
+    expect(() => setCell(board, { row: -1, col: 0 }, 'X')).toThrow('out of bounds');
+  });
+
+  it('throws error for negative column', () => {
+    const board = createEmptyBoard();
+    expect(() => setCell(board, { row: 0, col: -1 }, 'X')).toThrow('out of bounds');
+  });
+
+  it('throws error for row >= BOARD_SIZE', () => {
+    const board = createEmptyBoard();
+    expect(() => setCell(board, { row: 3, col: 0 }, 'X')).toThrow('out of bounds');
+  });
+
+  it('throws error for column >= BOARD_SIZE', () => {
+    const board = createEmptyBoard();
+    expect(() => setCell(board, { row: 0, col: 3 }, 'X')).toThrow('out of bounds');
+  });
+
+  it('accepts boundary positions (0,0) and (2,2)', () => {
+    const board = createEmptyBoard();
+    expect(() => setCell(board, { row: 0, col: 0 }, 'X')).not.toThrow();
+    expect(() => setCell(board, { row: 2, col: 2 }, 'O')).not.toThrow();
   });
 });
 

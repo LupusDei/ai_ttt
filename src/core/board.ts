@@ -28,16 +28,37 @@ export function createInitialGameState(): GameState {
 }
 
 /**
+ * Validates that a position is within board bounds
+ * @throws Error if position is out of bounds
+ */
+function validatePosition(position: Position): void {
+  if (
+    position.row < 0 ||
+    position.row >= BOARD_SIZE ||
+    position.col < 0 ||
+    position.col >= BOARD_SIZE
+  ) {
+    throw new Error(
+      `Position (${position.row}, ${position.col}) is out of bounds. Valid range is 0-${BOARD_SIZE - 1}.`
+    );
+  }
+}
+
+/**
  * Gets the cell value at the specified position
+ * @throws Error if position is out of bounds
  */
 export function getCell(board: BoardGrid, position: Position): CellValue {
+  validatePosition(position);
   return board[position.row][position.col];
 }
 
 /**
  * Sets a cell value at the specified position (immutable - returns new board)
+ * @throws Error if position is out of bounds
  */
 export function setCell(board: BoardGrid, position: Position, value: CellValue): BoardGrid {
+  validatePosition(position);
   const newBoard = cloneBoard(board);
   newBoard[position.row][position.col] = value;
   return newBoard;
