@@ -49,25 +49,3 @@ export interface GameState {
   difficulty: AIDifficulty;
   result: GameResult | null;
 }
-
-/** Creates an empty 3x3 board */
-export function createEmptyBoard(): BoardGrid {
-  return [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ];
-}
-
-/** Creates the initial game state */
-export function createInitialGameState(): GameState {
-  return {
-    board: createEmptyBoard(),
-    currentPlayer: 'X',
-    phase: 'setup',
-    mode: 'hvh',
-    humanPlayer: 'X',
-    difficulty: 'fun',
-    result: null,
-  };
-}

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import type { AIStrategy } from './types.ts';
 import type { AIDifficulty, BoardGrid } from '../core/types.ts';
-import { createEmptyBoard } from '../core/types.ts';
+import { createEmptyBoard } from '../core/board.ts';
 
 describe('AIStrategy interface', () => {
   it('accepts a valid strategy implementation', () => {

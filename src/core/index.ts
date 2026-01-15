@@ -12,10 +12,11 @@ export type {
   GameState,
 } from './types.ts';
 
-export { BOARD_SIZE, createEmptyBoard, createInitialGameState } from './types.ts';
+export { BOARD_SIZE } from './types.ts';
 
 export {
-  createBoard,
+  createEmptyBoard,
+  createInitialGameState,
   getCell,
   setCell,
   getEmptyCells,

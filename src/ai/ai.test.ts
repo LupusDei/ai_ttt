@@ -3,7 +3,7 @@ import { funStrategy } from './fun.ts';
 import { godStrategy } from './god.ts';
 import { getStrategy } from './index.ts';
 import type { BoardGrid, Player } from '../core/types.ts';
-import { createBoard, setCell, getEmptyCells, checkWinner, isDraw } from '../core/board.ts';
+import { createEmptyBoard, setCell, getEmptyCells, checkWinner, isDraw } from '../core/board.ts';
 
 /**
  * Simulates a game between two strategies
@@ -13,7 +13,7 @@ function simulateGame(
   xStrategy: (board: BoardGrid, player: Player) => { row: number; col: number },
   oStrategy: (board: BoardGrid, player: Player) => { row: number; col: number }
 ): Player | null {
-  let board = createBoard();
+  let board = createEmptyBoard();
   let currentPlayer: Player = 'X';
 
   // Maximum 9 moves in tic-tac-toe
@@ -45,7 +45,7 @@ function randomMove(board: BoardGrid): { row: number; col: number } {
 
 describe('funStrategy', () => {
   it('returns a valid move on empty board', () => {
-    const board = createBoard();
+    const board = createEmptyBoard();
     const move = funStrategy.getMove(board, 'X');
 
     expect(move.row).toBeGreaterThanOrEqual(0);
@@ -98,7 +98,7 @@ describe('funStrategy', () => {
 
 describe('godStrategy', () => {
   it('returns a valid move on empty board', () => {
-    const board = createBoard();
+    const board = createEmptyBoard();
     const move = godStrategy.getMove(board, 'X');
 
     expect(move.row).toBeGreaterThanOrEqual(0);
@@ -108,7 +108,7 @@ describe('godStrategy', () => {
   });
 
   it('takes center on empty board', () => {
-    const board = createBoard();
+    const board = createEmptyBoard();
     const move = godStrategy.getMove(board, 'X');
 
     expect(move).toEqual({ row: 1, col: 1 });
