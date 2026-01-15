@@ -63,8 +63,8 @@ function App(): ReactElement {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
-      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 sm:mb-8 md:mb-10">
+    <div className="min-h-screen min-h-dvh w-full bg-gray-900 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 md:mb-8">
         Tic-Tac-Toe
       </h1>
 
