@@ -27,22 +27,28 @@ function generateParticles(winner: 'X' | 'O'): Particle[] {
   const colors = PARTICLE_COLORS[winner];
   const particles: Particle[] = [];
 
-  // Create multiple bursts
-  for (let burst = 0; burst < 3; burst++) {
-    const burstX = 20 + Math.random() * 60; // Random X position (20-80%)
-    const burstDelay = burst * 0.3;
+  // Create multiple bursts centered around the "Player X Wins!" text area
+  const numBursts = 6;
+  const particlesPerBurst = 35;
+
+  for (let burst = 0; burst < numBursts; burst++) {
+    // Position bursts around the center-top area where the status text is
+    // Spread horizontally between 25-75% and vertically around 35-50%
+    const burstX = 30 + Math.random() * 40; // Random X position (30-70%)
+    const burstY = 35 + Math.random() * 15; // Random Y position (35-50%)
+    const burstDelay = burst * 0.4; // Stagger bursts
 
     // Each burst has multiple particles
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < particlesPerBurst; i++) {
       particles.push({
-        id: burst * 20 + i,
-        x: burstX,
-        y: 50 + Math.random() * 20,
+        id: burst * particlesPerBurst + i,
+        x: burstX + (Math.random() - 0.5) * 10, // Small spread around burst center
+        y: burstY + (Math.random() - 0.5) * 8,
         color: colors[Math.floor(Math.random() * colors.length)],
-        size: 4 + Math.random() * 8,
+        size: 5 + Math.random() * 10,
         angle: Math.random() * 360,
-        speed: 50 + Math.random() * 100,
-        delay: burstDelay + Math.random() * 0.2,
+        speed: 60 + Math.random() * 120,
+        delay: burstDelay + Math.random() * 0.3,
       });
     }
   }

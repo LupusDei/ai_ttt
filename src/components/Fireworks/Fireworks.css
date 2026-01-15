@@ -12,7 +12,7 @@
 .firework-particle {
   position: absolute;
   border-radius: 50%;
-  animation: firework-burst 1.5s ease-out forwards;
+  animation: firework-burst 2.5s ease-out forwards;
 }
 
 @keyframes firework-burst {
@@ -36,7 +36,7 @@
 /* Fallback for browsers that don't support CSS trigonometry */
 @supports not (transform: translate(calc(cos(45deg) * 1px), 0)) {
   .firework-particle {
-    animation: firework-burst-fallback 1.5s ease-out forwards;
+    animation: firework-burst-fallback 2.5s ease-out forwards;
   }
 
   @keyframes firework-burst-fallback {
