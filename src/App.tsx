@@ -63,11 +63,13 @@ function App(): ReactElement {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
-      <h1 className="text-4xl font-bold text-white mb-8">Tic-Tac-Toe</h1>
+    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 sm:mb-8 md:mb-10">
+        Tic-Tac-Toe
+      </h1>
 
       {state.phase === 'setup' ? (
-        <div className="flex flex-col gap-6 items-center">
+        <div className="flex flex-col gap-4 sm:gap-6 items-center w-full max-w-sm px-4">
           <ModeSelector value={selectedMode} onChange={setSelectedMode} />
 
           {showPlayerSelector && (
@@ -87,7 +89,7 @@ function App(): ReactElement {
           </button>
         </div>
       ) : (
-        <div className="flex flex-col gap-6 items-center">
+        <div className="flex flex-col gap-4 sm:gap-6 items-center w-full max-w-md px-4">
           <GameStatus
             currentPlayer={state.currentPlayer}
             winner={state.result?.winner ?? null}

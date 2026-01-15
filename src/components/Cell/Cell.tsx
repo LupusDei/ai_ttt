@@ -10,7 +10,7 @@ export interface CellProps {
 
 export function Cell({ value, onClick, disabled = false, isWinning = false }: CellProps): React.JSX.Element {
   const baseClasses =
-    'w-20 h-20 text-4xl font-bold flex items-center justify-center border-2 border-gray-600 transition-all duration-200';
+    'w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-3xl sm:text-4xl md:text-5xl font-bold flex items-center justify-center border-2 border-gray-600 transition-all duration-200';
 
   const stateClasses = disabled
     ? 'cursor-not-allowed opacity-70'
