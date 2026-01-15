@@ -22,4 +22,6 @@ export {
   cloneBoard,
   checkWinner,
   getWinningLine,
+  isBoardFull,
+  isDraw,
 } from './board.ts';
