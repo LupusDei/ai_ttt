@@ -273,6 +273,153 @@ describe('Integration Tests', () => {
     });
   });
 
+  describe('Core Functions Integration', () => {
+    it('correctly detects and displays row win via getGameResult', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      await user.click(screen.getByText('Start Game'));
+
+      const cells = screen.getAllByRole('button').filter((btn) => btn.textContent === '');
+
+      // X wins with middle row (row 1)
+      await user.click(cells[3]); // X at (1,0)
+      await user.click(cells[0]); // O at (0,0)
+      await user.click(cells[4]); // X at (1,1)
+      await user.click(cells[1]); // O at (0,1)
+      await user.click(cells[5]); // X at (1,2) - row 1 win
+
+      expect(screen.getByRole('status')).toHaveTextContent('Player X wins!');
+    });
+
+    it('correctly detects and displays column win via getGameResult', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      await user.click(screen.getByText('Start Game'));
+
+      const cells = screen.getAllByRole('button').filter((btn) => btn.textContent === '');
+
+      // X wins with left column (col 0)
+      await user.click(cells[0]); // X at (0,0)
+      await user.click(cells[1]); // O at (0,1)
+      await user.click(cells[3]); // X at (1,0)
+      await user.click(cells[4]); // O at (1,1)
+      await user.click(cells[6]); // X at (2,0) - col 0 win
+
+      expect(screen.getByRole('status')).toHaveTextContent('Player X wins!');
+    });
+
+    it('correctly detects and displays main diagonal win via getGameResult', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      await user.click(screen.getByText('Start Game'));
+
+      const cells = screen.getAllByRole('button').filter((btn) => btn.textContent === '');
+
+      // X wins with main diagonal
+      await user.click(cells[0]); // X at (0,0)
+      await user.click(cells[1]); // O at (0,1)
+      await user.click(cells[4]); // X at (1,1)
+      await user.click(cells[2]); // O at (0,2)
+      await user.click(cells[8]); // X at (2,2) - diagonal win
+
+      expect(screen.getByRole('status')).toHaveTextContent('Player X wins!');
+    });
+
+    it('correctly detects and displays anti-diagonal win via getGameResult', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      await user.click(screen.getByText('Start Game'));
+
+      const cells = screen.getAllByRole('button').filter((btn) => btn.textContent === '');
+
+      // X wins with anti-diagonal
+      await user.click(cells[2]); // X at (0,2)
+      await user.click(cells[0]); // O at (0,0)
+      await user.click(cells[4]); // X at (1,1)
+      await user.click(cells[1]); // O at (0,1)
+      await user.click(cells[6]); // X at (2,0) - anti-diagonal win
+
+      expect(screen.getByRole('status')).toHaveTextContent('Player X wins!');
+    });
+
+    it('correctly uses setCell to update board immutably', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      await user.click(screen.getByText('Start Game'));
+
+      const cells = screen.getAllByRole('button').filter((btn) => btn.textContent === '');
+
+      // Make some moves and verify the board updates correctly
+      await user.click(cells[0]); // X at (0,0)
+      expect(cells[0]).toHaveTextContent('X');
+      expect(cells[1]).toHaveTextContent('');
+
+      await user.click(cells[1]); // O at (0,1)
+      expect(cells[0]).toHaveTextContent('X'); // Previous cell unchanged
+      expect(cells[1]).toHaveTextContent('O');
+
+      await user.click(cells[4]); // X at (1,1)
+      expect(cells[0]).toHaveTextContent('X');
+      expect(cells[1]).toHaveTextContent('O');
+      expect(cells[4]).toHaveTextContent('X');
+    });
+
+    it('correctly uses getEmptyCells to determine available moves', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      await user.click(screen.getByText('Start Game'));
+
+      const cells = screen.getAllByRole('button').filter((btn) => btn.textContent === '');
+
+      // Fill 8 cells to near-full board
+      await user.click(cells[0]); // X
+      await user.click(cells[1]); // O
+      await user.click(cells[2]); // X
+      await user.click(cells[4]); // O
+      await user.click(cells[3]); // X
+      await user.click(cells[5]); // O
+      await user.click(cells[7]); // X
+      await user.click(cells[6]); // O
+
+      // 8 cells filled, only cell 8 should be empty
+      expect(cells[8]).toHaveTextContent('');
+
+      // Final move should end game
+      await user.click(cells[8]); // X - this should be a draw
+      expect(screen.getByRole('status')).toHaveTextContent("It's a draw!");
+    });
+
+    it('correctly integrates checkWinner to stop game after win', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      await user.click(screen.getByText('Start Game'));
+
+      const cells = screen.getAllByRole('button').filter((btn) => btn.textContent === '');
+
+      // X wins quickly
+      await user.click(cells[0]); // X
+      await user.click(cells[3]); // O
+      await user.click(cells[1]); // X
+      await user.click(cells[4]); // O
+      await user.click(cells[2]); // X wins
+
+      // Verify game is stopped - clicking should not change anything
+      const emptyCell = cells[6];
+      await user.click(emptyCell);
+      expect(emptyCell).toHaveTextContent('');
+
+      // Status should still show X wins
+      expect(screen.getByRole('status')).toHaveTextContent('Player X wins!');
+    });
+  });
+
   describe('Game Status Display', () => {
     it('shows setup message initially', () => {
       render(<App />);
