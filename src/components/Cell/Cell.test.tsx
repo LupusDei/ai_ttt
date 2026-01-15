@@ -61,4 +61,15 @@ describe('Cell', () => {
     render(<Cell value="O" onClick={() => {}} />);
     expect(screen.getByRole('button')).toHaveClass('text-red-400');
   });
+
+  it('applies pop-in animation to value', () => {
+    render(<Cell value="X" onClick={() => {}} />);
+    const span = screen.getByText('X');
+    expect(span).toHaveClass('animate-pop-in');
+  });
+
+  it('applies pulse-win animation to winning cells', () => {
+    render(<Cell value="X" onClick={() => {}} isWinning />);
+    expect(screen.getByRole('button')).toHaveClass('animate-pulse-win');
+  });
 });

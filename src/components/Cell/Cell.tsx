@@ -16,7 +16,7 @@ export function Cell({ value, onClick, disabled = false, isWinning = false }: Ce
     ? 'cursor-not-allowed opacity-70'
     : 'cursor-pointer hover:bg-gray-700 hover:border-gray-500';
 
-  const winningClasses = isWinning ? 'bg-green-900 border-green-500' : 'bg-gray-800';
+  const winningClasses = isWinning ? 'bg-green-900 border-green-500 animate-pulse-win' : 'bg-gray-800';
 
   const valueClasses = value === 'X' ? 'text-blue-400' : value === 'O' ? 'text-red-400' : '';
 
@@ -28,7 +28,7 @@ export function Cell({ value, onClick, disabled = false, isWinning = false }: Ce
       disabled={disabled}
       aria-label={value ? `Cell contains ${value}` : 'Empty cell'}
     >
-      {value}
+      {value && <span className="animate-pop-in">{value}</span>}
     </button>
   );
 }
