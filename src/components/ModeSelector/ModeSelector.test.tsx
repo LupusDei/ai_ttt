@@ -21,7 +21,7 @@ describe('ModeSelector', () => {
     const hvhButton = screen.getByRole('button', { name: 'Human vs Human' });
 
     expect(hvcButton).toHaveClass('bg-blue-600');
-    expect(hvhButton).toHaveClass('bg-gray-200');
+    expect(hvhButton).toHaveClass('bg-gray-700');
   });
 
   it('calls onChange when a button is clicked', async () => {
@@ -63,7 +63,7 @@ describe('ModeSelector', () => {
 
     rerender(<ModeSelector value="cvc" onChange={onChange} />);
 
-    expect(screen.getByRole('button', { name: 'Human vs Human' })).toHaveClass('bg-gray-200');
+    expect(screen.getByRole('button', { name: 'Human vs Human' })).toHaveClass('bg-gray-700');
     expect(screen.getByRole('button', { name: 'Computer vs Computer' })).toHaveClass('bg-blue-600');
   });
 });
