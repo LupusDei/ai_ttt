@@ -5,6 +5,7 @@ import {
   setCell,
   getEmptyCells,
   cloneBoard,
+  getGameResult,
   checkWinner,
   getWinningLine,
   isBoardFull,
@@ -211,6 +212,68 @@ describe('checkWinner', () => {
       ['O', null, 'X'],
     ];
     expect(checkWinner(board)).toBe('O');
+  });
+});
+
+describe('getGameResult', () => {
+  it('returns no winner and no draw for empty board', () => {
+    const board = createBoard();
+    const result = getGameResult(board);
+    expect(result.winner).toBeNull();
+    expect(result.winningLine).toBeNull();
+    expect(result.isDraw).toBe(false);
+  });
+
+  it('returns winner with winning line for X winning', () => {
+    const board: BoardGrid = [
+      ['X', 'X', 'X'],
+      ['O', 'O', null],
+      [null, null, null],
+    ];
+    const result = getGameResult(board);
+    expect(result.winner).toBe('X');
+    expect(result.winningLine).toContainEqual({ row: 0, col: 0 });
+    expect(result.winningLine).toContainEqual({ row: 0, col: 1 });
+    expect(result.winningLine).toContainEqual({ row: 0, col: 2 });
+    expect(result.isDraw).toBe(false);
+  });
+
+  it('returns winner with winning line for diagonal win', () => {
+    const board: BoardGrid = [
+      ['X', 'O', null],
+      ['O', 'X', null],
+      [null, null, 'X'],
+    ];
+    const result = getGameResult(board);
+    expect(result.winner).toBe('X');
+    expect(result.winningLine).toContainEqual({ row: 0, col: 0 });
+    expect(result.winningLine).toContainEqual({ row: 1, col: 1 });
+    expect(result.winningLine).toContainEqual({ row: 2, col: 2 });
+    expect(result.isDraw).toBe(false);
+  });
+
+  it('returns draw for full board with no winner', () => {
+    const board: BoardGrid = [
+      ['X', 'O', 'X'],
+      ['X', 'O', 'O'],
+      ['O', 'X', 'X'],
+    ];
+    const result = getGameResult(board);
+    expect(result.winner).toBeNull();
+    expect(result.winningLine).toBeNull();
+    expect(result.isDraw).toBe(true);
+  });
+
+  it('returns no draw for game in progress', () => {
+    const board: BoardGrid = [
+      ['X', 'O', null],
+      [null, 'X', null],
+      ['O', null, null],
+    ];
+    const result = getGameResult(board);
+    expect(result.winner).toBeNull();
+    expect(result.winningLine).toBeNull();
+    expect(result.isDraw).toBe(false);
   });
 });
 

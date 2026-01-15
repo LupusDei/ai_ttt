@@ -20,6 +20,7 @@ export {
   setCell,
   getEmptyCells,
   cloneBoard,
+  getGameResult,
   checkWinner,
   getWinningLine,
   isBoardFull,

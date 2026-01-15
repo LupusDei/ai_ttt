@@ -5,10 +5,9 @@ import type {
   Player,
   AIDifficulty,
   Position,
-  GameResult,
 } from '../core/types';
 import { createInitialGameState, createEmptyBoard } from '../core/types';
-import { setCell, checkWinner, getWinningLine, isDraw } from '../core/board';
+import { setCell, getGameResult } from '../core/board';
 import { getStrategy } from '../ai';
 
 /** Default delay before AI makes a move (ms) */
@@ -59,16 +58,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       }
 
       const newBoard = setCell(state.board, action.position, state.currentPlayer);
-      const winner = checkWinner(newBoard);
-      const winningLine = getWinningLine(newBoard);
-      const gameIsDraw = isDraw(newBoard);
+      const result = getGameResult(newBoard);
 
-      if (winner || gameIsDraw) {
-        const result: GameResult = {
-          winner,
-          winningLine,
-          isDraw: gameIsDraw,
-        };
+      if (result.winner || result.isDraw) {
         return {
           ...state,
           board: newBoard,

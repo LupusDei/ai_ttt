@@ -1,4 +1,4 @@
-import type { BoardGrid, CellValue, Player, Position } from './types.ts';
+import type { BoardGrid, CellValue, GameResult, Player, Position } from './types.ts';
 import { BOARD_SIZE, createEmptyBoard } from './types.ts';
 
 /**
@@ -66,10 +66,11 @@ const WINNING_LINES: Position[][] = [
 ];
 
 /**
- * Checks if there's a winner on the board
- * @returns The winning player or null if no winner
+ * Gets the complete game result in a single pass.
+ * Consolidates winner detection, winning line, and draw check.
  */
-export function checkWinner(board: BoardGrid): Player | null {
+export function getGameResult(board: BoardGrid): GameResult {
+  // Check for a winner
   for (const line of WINNING_LINES) {
     const [a, b, c] = line;
     const cellA = getCell(board, a);
@@ -77,10 +78,29 @@ export function checkWinner(board: BoardGrid): Player | null {
     const cellC = getCell(board, c);
 
     if (cellA !== null && cellA === cellB && cellB === cellC) {
-      return cellA;
+      return {
+        winner: cellA,
+        winningLine: line,
+        isDraw: false,
+      };
     }
   }
-  return null;
+
+  // No winner - check for draw
+  const boardFull = getEmptyCells(board).length === 0;
+  return {
+    winner: null,
+    winningLine: null,
+    isDraw: boardFull,
+  };
+}
+
+/**
+ * Checks if there's a winner on the board
+ * @returns The winning player or null if no winner
+ */
+export function checkWinner(board: BoardGrid): Player | null {
+  return getGameResult(board).winner;
 }
 
 /**
@@ -88,17 +108,7 @@ export function checkWinner(board: BoardGrid): Player | null {
  * @returns Array of positions forming the winning line, or null if no winner
  */
 export function getWinningLine(board: BoardGrid): Position[] | null {
-  for (const line of WINNING_LINES) {
-    const [a, b, c] = line;
-    const cellA = getCell(board, a);
-    const cellB = getCell(board, b);
-    const cellC = getCell(board, c);
-
-    if (cellA !== null && cellA === cellB && cellB === cellC) {
-      return line;
-    }
-  }
-  return null;
+  return getGameResult(board).winningLine;
 }
 
 /**
@@ -112,5 +122,5 @@ export function isBoardFull(board: BoardGrid): boolean {
  * Checks if the game is a draw (board full with no winner)
  */
 export function isDraw(board: BoardGrid): boolean {
-  return isBoardFull(board) && checkWinner(board) === null;
+  return getGameResult(board).isDraw;
 }
