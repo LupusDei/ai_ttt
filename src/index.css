@@ -65,6 +65,8 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 h1 {
