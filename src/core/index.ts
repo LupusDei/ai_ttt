@@ -20,4 +20,6 @@ export {
   setCell,
   getEmptyCells,
   cloneBoard,
+  checkWinner,
+  getWinningLine,
 } from './board.ts';
