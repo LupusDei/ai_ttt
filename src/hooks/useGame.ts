@@ -1,4 +1,4 @@
-import { useReducer, useCallback } from 'react';
+import { useReducer, useCallback, useEffect, useRef } from 'react';
 import type {
   GameState,
   GameMode,
@@ -9,6 +9,10 @@ import type {
 } from '../core/types';
 import { createInitialGameState, createEmptyBoard } from '../core/types';
 import { setCell, checkWinner, getWinningLine, isDraw } from '../core/board';
+import { getStrategy } from '../ai';
+
+/** Default delay before AI makes a move (ms) */
+const DEFAULT_AI_DELAY = 500;
 
 /** Configuration for starting a new game */
 export interface GameConfig {
@@ -103,15 +107,16 @@ export interface UseGameReturn {
   isPlaying: boolean;
   /** Whether the game has finished */
   isFinished: boolean;
-  /** Whether it's currently the human player's turn (in PvE mode) */
+  /** Whether it's currently the human player's turn (in HvC mode) */
   isHumanTurn: boolean;
-  /** Whether it's currently the AI's turn (in PvE mode) */
+  /** Whether it's currently the AI's turn (in HvC mode) */
   isAITurn: boolean;
 }
 
 /** Hook for managing tic-tac-toe game state */
-export function useGame(): UseGameReturn {
+export function useGame(aiDelay: number = DEFAULT_AI_DELAY): UseGameReturn {
   const [state, dispatch] = useReducer(gameReducer, createInitialGameState());
+  const aiMoveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const startGame = useCallback((config: GameConfig) => {
     dispatch({ type: 'START_GAME', config });
@@ -122,13 +127,40 @@ export function useGame(): UseGameReturn {
   }, []);
 
   const resetGame = useCallback(() => {
+    // Clear any pending AI move
+    if (aiMoveTimeoutRef.current !== null) {
+      clearTimeout(aiMoveTimeoutRef.current);
+      aiMoveTimeoutRef.current = null;
+    }
     dispatch({ type: 'RESET_GAME' });
   }, []);
 
   const isPlaying = state.phase === 'playing';
   const isFinished = state.phase === 'finished';
-  const isHumanTurn = isPlaying && state.mode === 'pve' && state.currentPlayer === state.humanPlayer;
-  const isAITurn = isPlaying && state.mode === 'pve' && state.currentPlayer !== state.humanPlayer;
+  const isHumanTurn = isPlaying && state.mode === 'hvc' && state.currentPlayer === state.humanPlayer;
+  const isAITurn = isPlaying && state.mode === 'hvc' && state.currentPlayer !== state.humanPlayer;
+
+  // Auto-trigger AI moves in HvC mode
+  useEffect(() => {
+    if (!isAITurn) {
+      return;
+    }
+
+    const strategy = getStrategy(state.difficulty);
+    const aiMove = strategy.getMove(state.board, state.currentPlayer);
+
+    aiMoveTimeoutRef.current = setTimeout(() => {
+      dispatch({ type: 'MAKE_MOVE', position: aiMove });
+      aiMoveTimeoutRef.current = null;
+    }, aiDelay);
+
+    return (): void => {
+      if (aiMoveTimeoutRef.current !== null) {
+        clearTimeout(aiMoveTimeoutRef.current);
+        aiMoveTimeoutRef.current = null;
+      }
+    };
+  }, [isAITurn, state.board, state.currentPlayer, state.difficulty, aiDelay]);
 
   return {
     state,

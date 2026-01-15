@@ -18,13 +18,13 @@ export interface Position {
 export type Board = [[Cell, Cell, Cell], [Cell, Cell, Cell], [Cell, Cell, Cell]];
 
 /** Game mode options */
-export type GameMode = 'pvp' | 'pve';
+export type GameMode = 'hvh' | 'hvc' | 'cvc';
 
-/** Which player the human controls in PvE mode */
+/** Which player the human controls in HvC mode */
 export type HumanPlayer = Player;
 
 /** AI difficulty levels */
-export type AIDifficulty = 'easy' | 'medium' | 'hard';
+export type AIDifficulty = 'fun' | 'god';
 
 /** Current phase of the game */
 export type GamePhase = 'setup' | 'playing' | 'finished';
@@ -62,9 +62,9 @@ export function createInitialGameState(): GameState {
     board: createEmptyBoard(),
     currentPlayer: 'X',
     phase: 'setup',
-    mode: 'pvp',
+    mode: 'hvh',
     humanPlayer: 'X',
-    difficulty: 'medium',
+    difficulty: 'fun',
     result: null,
   };
 }

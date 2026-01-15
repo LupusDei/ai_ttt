@@ -38,9 +38,9 @@ describe('createInitialGameState', () => {
     expect(state.board).toBeDefined();
     expect(state.currentPlayer).toBe('X');
     expect(state.phase).toBe('setup');
-    expect(state.mode).toBe('pvp');
+    expect(state.mode).toBe('hvh');
     expect(state.humanPlayer).toBe('X');
-    expect(state.difficulty).toBe('medium');
+    expect(state.difficulty).toBe('fun');
     expect(state.result).toBeNull();
   });
 
@@ -77,9 +77,9 @@ describe('Type definitions', () => {
       board: createEmptyBoard(),
       currentPlayer: 'O',
       phase: 'playing',
-      mode: 'pve',
+      mode: 'hvc',
       humanPlayer: 'X',
-      difficulty: 'hard',
+      difficulty: 'god',
       result: null,
     };
     expect(validState).toBeDefined();
@@ -94,9 +94,9 @@ describe('Type definitions', () => {
       ],
       currentPlayer: 'O',
       phase: 'finished',
-      mode: 'pvp',
+      mode: 'hvh',
       humanPlayer: 'X',
-      difficulty: 'medium',
+      difficulty: 'fun',
       result: {
         winner: 'X',
         winningLine: [
@@ -121,9 +121,9 @@ describe('Type definitions', () => {
       ],
       currentPlayer: 'O',
       phase: 'finished',
-      mode: 'pvp',
+      mode: 'hvh',
       humanPlayer: 'X',
-      difficulty: 'medium',
+      difficulty: 'fun',
       result: {
         winner: null,
         winningLine: null,
