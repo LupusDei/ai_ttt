@@ -1,0 +1,60 @@
+.fireworks-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 50;
+}
+
+.firework-particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: firework-burst 1.5s ease-out forwards;
+}
+
+@keyframes firework-burst {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(
+        calc(cos(var(--angle)) * var(--speed)),
+        calc(sin(var(--angle)) * var(--speed) - 100px)
+      )
+      scale(0);
+    opacity: 0;
+  }
+}
+
+/* Fallback for browsers that don't support CSS trigonometry */
+@supports not (transform: translate(calc(cos(45deg) * 1px), 0)) {
+  .firework-particle {
+    animation: firework-burst-fallback 1.5s ease-out forwards;
+  }
+
+  @keyframes firework-burst-fallback {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100px) scale(0);
+      opacity: 0;
+    }
+  }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .firework-particle {
+    animation: none;
+    opacity: 0;
+  }
+}

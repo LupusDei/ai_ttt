@@ -8,3 +8,4 @@ export { PlayerSelector } from './PlayerSelector/index.ts';
 export { DifficultySelector } from './DifficultySelector/index.ts';
 export { GameStatus } from './GameStatus/index.ts';
 export { NewGameButton } from './NewGameButton/index.ts';
+export { Fireworks } from './Fireworks/index.ts';

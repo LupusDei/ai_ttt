@@ -9,6 +9,7 @@ import {
   DifficultySelector,
   GameStatus,
   NewGameButton,
+  Fireworks,
 } from './components';
 import './App.css';
 
@@ -152,6 +153,9 @@ function App(): ReactElement {
           )}
         </div>
       )}
+
+      {/* Fireworks celebration when someone wins */}
+      <Fireworks isActive={isFinished && state.result?.winner !== null} winner={state.result?.winner ?? null} />
     </div>
   );
 }
