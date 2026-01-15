@@ -1,5 +1,5 @@
 import type { BoardGrid, CellValue, Player, Position } from './types.ts';
-import { createEmptyBoard } from './types.ts';
+import { BOARD_SIZE, createEmptyBoard } from './types.ts';
 
 /**
  * Creates a new empty board
@@ -29,8 +29,8 @@ export function setCell(board: BoardGrid, position: Position, value: CellValue):
  */
 export function getEmptyCells(board: BoardGrid): Position[] {
   const emptyCells: Position[] = [];
-  for (let row = 0; row < 3; row++) {
-    for (let col = 0; col < 3; col++) {
+  for (let row = 0; row < BOARD_SIZE; row++) {
+    for (let col = 0; col < BOARD_SIZE; col++) {
       if (board[row][col] === null) {
         emptyCells.push({ row, col });
       }

@@ -2,6 +2,9 @@
  * Core type definitions for the Tic-Tac-Toe game
  */
 
+/** Board size (3x3 grid) */
+export const BOARD_SIZE = 3;
+
 /** The two players in the game */
 export type Player = 'X' | 'O';
 

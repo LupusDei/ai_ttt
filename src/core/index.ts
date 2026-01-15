@@ -12,7 +12,7 @@ export type {
   GameState,
 } from './types.ts';
 
-export { createEmptyBoard, createInitialGameState } from './types.ts';
+export { BOARD_SIZE, createEmptyBoard, createInitialGameState } from './types.ts';
 
 export {
   createBoard,
