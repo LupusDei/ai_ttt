@@ -1,10 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import {
-  createEmptyBoard,
-  createInitialGameState,
-  type BoardGrid,
-  type GameState,
-} from './types.ts';
+import { createEmptyBoard, createInitialGameState } from './board.ts';
+import type { BoardGrid, GameState } from './types.ts';
 
 describe('createEmptyBoard', () => {
   it('creates a 3x3 board', () => {

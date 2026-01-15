@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  createBoard,
+  createEmptyBoard,
   getCell,
   setCell,
   getEmptyCells,
@@ -13,9 +13,9 @@ import {
 } from './board.ts';
 import type { BoardGrid } from './types.ts';
 
-describe('createBoard', () => {
+describe('createEmptyBoard', () => {
   it('creates a 3x3 empty board', () => {
-    const board = createBoard();
+    const board = createEmptyBoard();
     expect(board).toHaveLength(3);
     for (const row of board) {
       expect(row).toHaveLength(3);
@@ -43,13 +43,13 @@ describe('getCell', () => {
 
 describe('setCell', () => {
   it('sets the cell value at the given position', () => {
-    const board = createBoard();
+    const board = createEmptyBoard();
     const newBoard = setCell(board, { row: 1, col: 1 }, 'X');
     expect(getCell(newBoard, { row: 1, col: 1 })).toBe('X');
   });
 
   it('returns a new board (immutable)', () => {
-    const board = createBoard();
+    const board = createEmptyBoard();
     const newBoard = setCell(board, { row: 0, col: 0 }, 'O');
     expect(newBoard).not.toBe(board);
     expect(getCell(board, { row: 0, col: 0 })).toBeNull();
@@ -69,7 +69,7 @@ describe('setCell', () => {
 
 describe('getEmptyCells', () => {
   it('returns all empty positions on an empty board', () => {
-    const board = createBoard();
+    const board = createEmptyBoard();
     const emptyCells = getEmptyCells(board);
     expect(emptyCells).toHaveLength(9);
   });
@@ -126,7 +126,7 @@ describe('cloneBoard', () => {
 
 describe('checkWinner', () => {
   it('returns null for empty board', () => {
-    const board = createBoard();
+    const board = createEmptyBoard();
     expect(checkWinner(board)).toBeNull();
   });
 
@@ -217,7 +217,7 @@ describe('checkWinner', () => {
 
 describe('getGameResult', () => {
   it('returns no winner and no draw for empty board', () => {
-    const board = createBoard();
+    const board = createEmptyBoard();
     const result = getGameResult(board);
     expect(result.winner).toBeNull();
     expect(result.winningLine).toBeNull();
@@ -279,7 +279,7 @@ describe('getGameResult', () => {
 
 describe('getWinningLine', () => {
   it('returns null for empty board', () => {
-    const board = createBoard();
+    const board = createEmptyBoard();
     expect(getWinningLine(board)).toBeNull();
   });
 
@@ -321,7 +321,7 @@ describe('getWinningLine', () => {
 
 describe('isBoardFull', () => {
   it('returns false for empty board', () => {
-    const board = createBoard();
+    const board = createEmptyBoard();
     expect(isBoardFull(board)).toBe(false);
   });
 
@@ -346,7 +346,7 @@ describe('isBoardFull', () => {
 
 describe('isDraw', () => {
   it('returns false for empty board', () => {
-    const board = createBoard();
+    const board = createEmptyBoard();
     expect(isDraw(board)).toBe(false);
   });
 

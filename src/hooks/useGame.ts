@@ -6,8 +6,7 @@ import type {
   AIDifficulty,
   Position,
 } from '../core/types';
-import { createInitialGameState, createEmptyBoard } from '../core/types';
-import { setCell, getGameResult } from '../core/board';
+import { createInitialGameState, createEmptyBoard, setCell, getGameResult } from '../core/board';
 import { getStrategy } from '../ai';
 
 /** Default delay before AI makes a move (ms) */

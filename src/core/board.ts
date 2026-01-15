@@ -1,11 +1,30 @@
-import type { BoardGrid, CellValue, GameResult, Player, Position } from './types.ts';
-import { BOARD_SIZE, createEmptyBoard } from './types.ts';
+import type { BoardGrid, CellValue, GameResult, GameState, Player, Position } from './types.ts';
+import { BOARD_SIZE } from './types.ts';
 
 /**
- * Creates a new empty board
+ * Creates an empty 3x3 board
  */
-export function createBoard(): BoardGrid {
-  return createEmptyBoard();
+export function createEmptyBoard(): BoardGrid {
+  return [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ];
+}
+
+/**
+ * Creates the initial game state
+ */
+export function createInitialGameState(): GameState {
+  return {
+    board: createEmptyBoard(),
+    currentPlayer: 'X',
+    phase: 'setup',
+    mode: 'hvh',
+    humanPlayer: 'X',
+    difficulty: 'fun',
+    result: null,
+  };
 }
 
 /**
