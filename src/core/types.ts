@@ -18,7 +18,7 @@ export interface Position {
 export type Board = [[Cell, Cell, Cell], [Cell, Cell, Cell], [Cell, Cell, Cell]];
 
 /** Game mode options */
-export type GameMode = 'pvp' | 'pve';
+export type GameMode = 'hvh' | 'hvc' | 'cvc';
 
 /** Which player the human controls in PvE mode */
 export type HumanPlayer = Player;
@@ -62,7 +62,7 @@ export function createInitialGameState(): GameState {
     board: createEmptyBoard(),
     currentPlayer: 'X',
     phase: 'setup',
-    mode: 'pvp',
+    mode: 'hvh',
     humanPlayer: 'X',
     difficulty: 'medium',
     result: null,

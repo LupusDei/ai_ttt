@@ -37,7 +37,7 @@ describe('useGame', () => {
 
       act(() => {
         result.current.startGame({
-          mode: 'pvp',
+          mode: 'hvh',
           humanPlayer: 'X',
           difficulty: 'medium',
         });
@@ -52,13 +52,13 @@ describe('useGame', () => {
 
       act(() => {
         result.current.startGame({
-          mode: 'pve',
+          mode: 'hvc',
           humanPlayer: 'O',
           difficulty: 'hard',
         });
       });
 
-      expect(result.current.state.mode).toBe('pve');
+      expect(result.current.state.mode).toBe('hvc');
       expect(result.current.state.humanPlayer).toBe('O');
       expect(result.current.state.difficulty).toBe('hard');
     });
@@ -68,7 +68,7 @@ describe('useGame', () => {
 
       act(() => {
         result.current.startGame({
-          mode: 'pvp',
+          mode: 'hvh',
           humanPlayer: 'X',
           difficulty: 'medium',
         });
@@ -77,7 +77,7 @@ describe('useGame', () => {
 
       act(() => {
         result.current.startGame({
-          mode: 'pvp',
+          mode: 'hvh',
           humanPlayer: 'X',
           difficulty: 'medium',
         });
@@ -94,7 +94,7 @@ describe('useGame', () => {
 
       act(() => {
         result.current.startGame({
-          mode: 'pvp',
+          mode: 'hvh',
           humanPlayer: 'X',
           difficulty: 'medium',
         });
@@ -112,7 +112,7 @@ describe('useGame', () => {
 
       act(() => {
         result.current.startGame({
-          mode: 'pvp',
+          mode: 'hvh',
           humanPlayer: 'X',
           difficulty: 'medium',
         });
@@ -132,7 +132,7 @@ describe('useGame', () => {
 
       act(() => {
         result.current.startGame({
-          mode: 'pvp',
+          mode: 'hvh',
           humanPlayer: 'X',
           difficulty: 'medium',
         });
@@ -164,7 +164,7 @@ describe('useGame', () => {
 
       act(() => {
         result.current.startGame({
-          mode: 'pvp',
+          mode: 'hvh',
           humanPlayer: 'X',
           difficulty: 'medium',
         });
@@ -202,7 +202,7 @@ describe('useGame', () => {
 
       act(() => {
         result.current.startGame({
-          mode: 'pvp',
+          mode: 'hvh',
           humanPlayer: 'X',
           difficulty: 'medium',
         });
@@ -239,7 +239,7 @@ describe('useGame', () => {
 
       act(() => {
         result.current.startGame({
-          mode: 'pvp',
+          mode: 'hvh',
           humanPlayer: 'X',
           difficulty: 'medium',
         });
@@ -257,12 +257,12 @@ describe('useGame', () => {
   });
 
   describe('computed values', () => {
-    it('isHumanTurn is true when human should play in PvE', () => {
+    it('isHumanTurn is true when human should play in HvC mode', () => {
       const { result } = renderHook(() => useGame());
 
       act(() => {
         result.current.startGame({
-          mode: 'pve',
+          mode: 'hvc',
           humanPlayer: 'X',
           difficulty: 'medium',
         });
@@ -272,12 +272,12 @@ describe('useGame', () => {
       expect(result.current.isAITurn).toBe(false);
     });
 
-    it('isAITurn is true when AI should play in PvE', () => {
+    it('isAITurn is true when AI should play in HvC mode', () => {
       const { result } = renderHook(() => useGame());
 
       act(() => {
         result.current.startGame({
-          mode: 'pve',
+          mode: 'hvc',
           humanPlayer: 'X',
           difficulty: 'medium',
         });
@@ -288,12 +288,12 @@ describe('useGame', () => {
       expect(result.current.isAITurn).toBe(true);
     });
 
-    it('isHumanTurn and isAITurn are false in PvP mode', () => {
+    it('isHumanTurn and isAITurn are false in HvH mode', () => {
       const { result } = renderHook(() => useGame());
 
       act(() => {
         result.current.startGame({
-          mode: 'pvp',
+          mode: 'hvh',
           humanPlayer: 'X',
           difficulty: 'medium',
         });

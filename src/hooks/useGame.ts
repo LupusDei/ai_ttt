@@ -127,8 +127,11 @@ export function useGame(): UseGameReturn {
 
   const isPlaying = state.phase === 'playing';
   const isFinished = state.phase === 'finished';
-  const isHumanTurn = isPlaying && state.mode === 'pve' && state.currentPlayer === state.humanPlayer;
-  const isAITurn = isPlaying && state.mode === 'pve' && state.currentPlayer !== state.humanPlayer;
+  const isHumanTurn =
+    isPlaying && state.mode === 'hvc' && state.currentPlayer === state.humanPlayer;
+  const isAITurn =
+    isPlaying &&
+    (state.mode === 'cvc' || (state.mode === 'hvc' && state.currentPlayer !== state.humanPlayer));
 
   return {
     state,
