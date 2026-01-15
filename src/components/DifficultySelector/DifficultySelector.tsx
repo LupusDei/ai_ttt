@@ -6,6 +6,17 @@ interface DifficultySelectorProps {
   onChange: (difficulty: AIDifficulty) => void;
 }
 
+function getDifficultyDescription(value: AIDifficulty): string {
+  switch (value) {
+    case 'easy':
+      return 'Random moves - very easy to beat';
+    case 'fun':
+      return 'Blocks and wins - but beatable';
+    case 'god':
+      return 'Unbeatable perfect play';
+  }
+}
+
 export function DifficultySelector({
   value,
   onChange,
@@ -14,6 +25,18 @@ export function DifficultySelector({
     <div className="flex flex-col gap-2">
       <span className="text-sm text-gray-400">AI Difficulty:</span>
       <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => onChange('easy')}
+          className={`px-4 py-2 rounded-lg font-bold transition-colors ${
+            value === 'easy'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+          }`}
+          aria-pressed={value === 'easy'}
+        >
+          Easy
+        </button>
         <button
           type="button"
           onClick={() => onChange('fun')}
@@ -39,9 +62,7 @@ export function DifficultySelector({
           God
         </button>
       </div>
-      <span className="text-xs text-gray-500">
-        {value === 'fun' ? 'Beatable AI that makes mistakes' : 'Unbeatable perfect play'}
-      </span>
+      <span className="text-xs text-gray-500">{getDifficultyDescription(value)}</span>
     </div>
   );
 }
