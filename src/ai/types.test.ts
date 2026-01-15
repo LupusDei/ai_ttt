@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import type { AIStrategy } from './types.ts';
-import type { AIDifficulty, Board } from '../core/types.ts';
+import type { AIDifficulty, BoardGrid } from '../core/types.ts';
 import { createEmptyBoard } from '../core/types.ts';
 
 describe('AIStrategy interface', () => {
@@ -8,7 +8,7 @@ describe('AIStrategy interface', () => {
     const mockStrategy: AIStrategy = {
       name: 'Test Strategy',
       difficulty: 'fun',
-      getMove: (board: Board) => {
+      getMove: (board: BoardGrid) => {
         // Simple mock: return first empty cell
         for (let row = 0; row < 3; row++) {
           for (let col = 0; col < 3; col++) {
@@ -33,7 +33,7 @@ describe('AIStrategy interface', () => {
     const mockStrategy: AIStrategy = {
       name: 'Center Finder',
       difficulty: 'god',
-      getMove: (board: Board) => {
+      getMove: (board: BoardGrid) => {
         // Try center first
         if (board[1][1] === null) {
           return { row: 1, col: 1 };
@@ -50,7 +50,7 @@ describe('AIStrategy interface', () => {
       },
     };
 
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', null, null],
       [null, null, null],
       [null, null, 'O'],

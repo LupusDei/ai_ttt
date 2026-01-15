@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { Cell as CellValue } from '../../core/types';
+import type { CellValue } from '../../core/types';
 
 export interface CellProps {
   value: CellValue;

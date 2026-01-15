@@ -2,15 +2,15 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import { Board } from './Board';
-import type { Board as BoardType } from '../../core/types';
+import type { BoardGrid } from '../../core/types';
 
-const emptyBoard: BoardType = [
+const emptyBoard: BoardGrid = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
 ];
 
-const partialBoard: BoardType = [
+const partialBoard: BoardGrid = [
   ['X', 'O', null],
   [null, 'X', null],
   [null, null, 'O'],

@@ -6,7 +6,7 @@
 export type Player = 'X' | 'O';
 
 /** A cell can be empty (null) or occupied by a player */
-export type Cell = Player | null;
+export type CellValue = Player | null;
 
 /** Position on the board (0-2 for row and column) */
 export interface Position {
@@ -15,7 +15,7 @@ export interface Position {
 }
 
 /** The 3x3 game board represented as a 2D array */
-export type Board = [[Cell, Cell, Cell], [Cell, Cell, Cell], [Cell, Cell, Cell]];
+export type BoardGrid = [[CellValue, CellValue, CellValue], [CellValue, CellValue, CellValue], [CellValue, CellValue, CellValue]];
 
 /** Game mode options */
 export type GameMode = 'hvh' | 'hvc' | 'cvc';
@@ -38,7 +38,7 @@ export interface GameResult {
 
 /** Complete game state */
 export interface GameState {
-  board: Board;
+  board: BoardGrid;
   currentPlayer: Player;
   phase: GamePhase;
   mode: GameMode;
@@ -48,7 +48,7 @@ export interface GameState {
 }
 
 /** Creates an empty 3x3 board */
-export function createEmptyBoard(): Board {
+export function createEmptyBoard(): BoardGrid {
   return [
     [null, null, null],
     [null, null, null],

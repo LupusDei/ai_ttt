@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { funStrategy } from './fun.ts';
 import { godStrategy } from './god.ts';
 import { getStrategy } from './index.ts';
-import type { Board, Player } from '../core/types.ts';
+import type { BoardGrid, Player } from '../core/types.ts';
 import { createBoard, setCell, getEmptyCells, checkWinner, isDraw } from '../core/board.ts';
 
 /**
@@ -10,8 +10,8 @@ import { createBoard, setCell, getEmptyCells, checkWinner, isDraw } from '../cor
  * Returns the winner or null for a draw
  */
 function simulateGame(
-  xStrategy: (board: Board, player: Player) => { row: number; col: number },
-  oStrategy: (board: Board, player: Player) => { row: number; col: number }
+  xStrategy: (board: BoardGrid, player: Player) => { row: number; col: number },
+  oStrategy: (board: BoardGrid, player: Player) => { row: number; col: number }
 ): Player | null {
   let board = createBoard();
   let currentPlayer: Player = 'X';
@@ -38,7 +38,7 @@ function simulateGame(
 }
 
 /** Random move strategy for testing */
-function randomMove(board: Board): { row: number; col: number } {
+function randomMove(board: BoardGrid): { row: number; col: number } {
   const emptyCells = getEmptyCells(board);
   return emptyCells[Math.floor(Math.random() * emptyCells.length)];
 }
@@ -55,7 +55,7 @@ describe('funStrategy', () => {
   });
 
   it('returns a valid move on partially filled board', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', null],
       [null, 'X', null],
       ['O', null, null],
@@ -67,7 +67,7 @@ describe('funStrategy', () => {
   });
 
   it('takes winning move when available', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'X', null],
       ['O', 'O', null],
       [null, null, null],
@@ -79,7 +79,7 @@ describe('funStrategy', () => {
   });
 
   it('blocks opponent winning move', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['O', 'O', null],
       ['X', null, null],
       [null, null, 'X'],
@@ -115,7 +115,7 @@ describe('godStrategy', () => {
   });
 
   it('returns a valid move on partially filled board', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'O', null],
       [null, 'X', null],
       ['O', null, null],
@@ -127,7 +127,7 @@ describe('godStrategy', () => {
   });
 
   it('takes winning move when available', () => {
-    const board: Board = [
+    const board: BoardGrid = [
       ['X', 'X', null],
       ['O', 'O', null],
       [null, null, null],

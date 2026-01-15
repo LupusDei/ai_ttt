@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   createEmptyBoard,
   createInitialGameState,
-  type Board,
+  type BoardGrid,
   type GameState,
 } from './types.ts';
 
@@ -64,7 +64,7 @@ describe('createInitialGameState', () => {
 
 describe('Type definitions', () => {
   it('Board type accepts valid 3x3 arrays', () => {
-    const validBoard: Board = [
+    const validBoard: BoardGrid = [
       ['X', 'O', null],
       [null, 'X', 'O'],
       ['O', null, 'X'],

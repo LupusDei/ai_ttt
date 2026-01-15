@@ -1,24 +1,24 @@
-import type { Board, Cell, Player, Position } from './types.ts';
+import type { BoardGrid, CellValue, Player, Position } from './types.ts';
 import { createEmptyBoard } from './types.ts';
 
 /**
  * Creates a new empty board
  */
-export function createBoard(): Board {
+export function createBoard(): BoardGrid {
   return createEmptyBoard();
 }
 
 /**
  * Gets the cell value at the specified position
  */
-export function getCell(board: Board, position: Position): Cell {
+export function getCell(board: BoardGrid, position: Position): CellValue {
   return board[position.row][position.col];
 }
 
 /**
  * Sets a cell value at the specified position (immutable - returns new board)
  */
-export function setCell(board: Board, position: Position, value: Cell): Board {
+export function setCell(board: BoardGrid, position: Position, value: CellValue): BoardGrid {
   const newBoard = cloneBoard(board);
   newBoard[position.row][position.col] = value;
   return newBoard;
@@ -27,7 +27,7 @@ export function setCell(board: Board, position: Position, value: Cell): Board {
 /**
  * Gets all empty cell positions on the board
  */
-export function getEmptyCells(board: Board): Position[] {
+export function getEmptyCells(board: BoardGrid): Position[] {
   const emptyCells: Position[] = [];
   for (let row = 0; row < 3; row++) {
     for (let col = 0; col < 3; col++) {
@@ -42,7 +42,7 @@ export function getEmptyCells(board: Board): Position[] {
 /**
  * Creates a deep clone of the board
  */
-export function cloneBoard(board: Board): Board {
+export function cloneBoard(board: BoardGrid): BoardGrid {
   return [
     [board[0][0], board[0][1], board[0][2]],
     [board[1][0], board[1][1], board[1][2]],
@@ -69,7 +69,7 @@ const WINNING_LINES: Position[][] = [
  * Checks if there's a winner on the board
  * @returns The winning player or null if no winner
  */
-export function checkWinner(board: Board): Player | null {
+export function checkWinner(board: BoardGrid): Player | null {
   for (const line of WINNING_LINES) {
     const [a, b, c] = line;
     const cellA = getCell(board, a);
@@ -87,7 +87,7 @@ export function checkWinner(board: Board): Player | null {
  * Gets the winning line positions if there's a winner
  * @returns Array of positions forming the winning line, or null if no winner
  */
-export function getWinningLine(board: Board): Position[] | null {
+export function getWinningLine(board: BoardGrid): Position[] | null {
   for (const line of WINNING_LINES) {
     const [a, b, c] = line;
     const cellA = getCell(board, a);
@@ -104,13 +104,13 @@ export function getWinningLine(board: Board): Position[] | null {
 /**
  * Checks if the board is completely filled
  */
-export function isBoardFull(board: Board): boolean {
+export function isBoardFull(board: BoardGrid): boolean {
   return getEmptyCells(board).length === 0;
 }
 
 /**
  * Checks if the game is a draw (board full with no winner)
  */
-export function isDraw(board: Board): boolean {
+export function isDraw(board: BoardGrid): boolean {
   return isBoardFull(board) && checkWinner(board) === null;
 }

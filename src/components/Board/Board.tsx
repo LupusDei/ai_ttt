@@ -1,9 +1,9 @@
 import type React from 'react';
-import type { Board as BoardType, Position } from '../../core/types';
+import type { BoardGrid, Position } from '../../core/types';
 import { Cell } from '../Cell';
 
 export interface BoardProps {
-  board: BoardType;
+  board: BoardGrid;
   onCellClick: (row: number, col: number) => void;
   winningLine?: Position[] | null;
   disabled?: boolean;
