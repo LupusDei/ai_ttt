@@ -1,3 +1,4 @@
+import { memo, useCallback } from 'react';
 import type React from 'react';
 import type { Player } from '../../core/types.ts';
 
@@ -6,14 +7,17 @@ interface PlayerSelectorProps {
   onChange: (player: Player) => void;
 }
 
-export function PlayerSelector({ value, onChange }: PlayerSelectorProps): React.JSX.Element {
+export const PlayerSelector = memo(function PlayerSelector({ value, onChange }: PlayerSelectorProps): React.JSX.Element {
+  const handleClickX = useCallback(() => onChange('X'), [onChange]);
+  const handleClickO = useCallback(() => onChange('O'), [onChange]);
+
   return (
     <div className="flex flex-col gap-2">
       <span className="text-sm text-gray-400">Play as:</span>
       <div className="flex gap-2">
         <button
           type="button"
-          onClick={() => onChange('X')}
+          onClick={handleClickX}
           className={`px-4 py-2 rounded-lg font-bold transition-colors ${
             value === 'X'
               ? 'bg-blue-600 text-white'
@@ -25,7 +29,7 @@ export function PlayerSelector({ value, onChange }: PlayerSelectorProps): React.
         </button>
         <button
           type="button"
-          onClick={() => onChange('O')}
+          onClick={handleClickO}
           className={`px-4 py-2 rounded-lg font-bold transition-colors ${
             value === 'O'
               ? 'bg-blue-600 text-white'
@@ -39,4 +43,4 @@ export function PlayerSelector({ value, onChange }: PlayerSelectorProps): React.
       <span className="text-xs text-gray-500">Note: X always goes first</span>
     </div>
   );
-}
+});

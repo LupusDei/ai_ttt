@@ -1,3 +1,4 @@
+import { memo, useCallback } from 'react';
 import type React from 'react';
 import type { AIDifficulty } from '../../core/types.ts';
 
@@ -17,17 +18,21 @@ function getDifficultyDescription(value: AIDifficulty): string {
   }
 }
 
-export function DifficultySelector({
+export const DifficultySelector = memo(function DifficultySelector({
   value,
   onChange,
 }: DifficultySelectorProps): React.JSX.Element {
+  const handleClickEasy = useCallback(() => onChange('easy'), [onChange]);
+  const handleClickFun = useCallback(() => onChange('fun'), [onChange]);
+  const handleClickGod = useCallback(() => onChange('god'), [onChange]);
+
   return (
     <div className="flex flex-col gap-2">
       <span className="text-sm text-gray-400">AI Difficulty:</span>
       <div className="flex gap-2">
         <button
           type="button"
-          onClick={() => onChange('easy')}
+          onClick={handleClickEasy}
           className={`px-4 py-2 rounded-lg font-bold transition-colors ${
             value === 'easy'
               ? 'bg-blue-600 text-white'
@@ -39,7 +44,7 @@ export function DifficultySelector({
         </button>
         <button
           type="button"
-          onClick={() => onChange('fun')}
+          onClick={handleClickFun}
           className={`px-4 py-2 rounded-lg font-bold transition-colors ${
             value === 'fun'
               ? 'bg-green-600 text-white'
@@ -51,7 +56,7 @@ export function DifficultySelector({
         </button>
         <button
           type="button"
-          onClick={() => onChange('god')}
+          onClick={handleClickGod}
           className={`px-4 py-2 rounded-lg font-bold transition-colors ${
             value === 'god'
               ? 'bg-red-600 text-white'
@@ -65,4 +70,4 @@ export function DifficultySelector({
       <span className="text-xs text-gray-500">{getDifficultyDescription(value)}</span>
     </div>
   );
-}
+});
