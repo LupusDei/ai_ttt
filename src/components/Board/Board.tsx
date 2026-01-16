@@ -21,7 +21,7 @@ export function Board({
   disabled = false,
 }: BoardProps): React.JSX.Element {
   return (
-    <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4" role="grid" aria-label="Tic-tac-toe board">
+    <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4" role="grid" aria-label="Tic-tac-toe game board, 3 by 3 grid">
       {board.map((row, rowIndex) =>
         row.map((cell, colIndex) => (
           <Cell
@@ -30,6 +30,8 @@ export function Board({
             onClick={() => onCellClick(rowIndex, colIndex)}
             disabled={disabled || cell !== null}
             isWinning={isWinningCell(rowIndex, colIndex, winningLine)}
+            row={rowIndex}
+            col={colIndex}
           />
         ))
       )}

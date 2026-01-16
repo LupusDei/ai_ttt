@@ -217,7 +217,7 @@ describe('Integration Tests', () => {
 
       await user.click(screen.getByText('Start Game'));
 
-      const grid = screen.getByRole('grid', { name: /tic-tac-toe board/i });
+      const grid = screen.getByRole('grid', { name: /tic-tac-toe game board/i });
       expect(grid).toBeInTheDocument();
 
       const cells = screen.getAllByRole('button').filter((btn) => btn.textContent === '');
@@ -479,6 +479,131 @@ describe('Integration Tests', () => {
       await user.click(cells[8]); // X - draw
 
       expect(screen.getByRole('status')).toHaveTextContent("It's a draw!");
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('has skip link that becomes visible on focus', () => {
+      render(<App />);
+
+      // Skip link should exist but be visually hidden
+      const skipLink = screen.getByText('Skip to main content');
+      expect(skipLink).toBeInTheDocument();
+      expect(skipLink).toHaveClass('sr-only');
+    });
+
+    it('has main landmark with correct id', () => {
+      render(<App />);
+
+      const main = screen.getByRole('main');
+      expect(main).toBeInTheDocument();
+      expect(main).toHaveAttribute('id', 'main-content');
+    });
+
+    it('cells have descriptive aria-labels with position information', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      await user.click(screen.getByText('Start Game'));
+
+      // Check that cells have position-based aria-labels
+      expect(screen.getByRole('button', { name: 'Row 1, Column 1: empty' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Row 2, Column 2: empty' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Row 3, Column 3: empty' })).toBeInTheDocument();
+    });
+
+    it('updates cell aria-label when cell is filled', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      await user.click(screen.getByText('Start Game'));
+
+      // Click center cell
+      await user.click(screen.getByRole('button', { name: 'Row 2, Column 2: empty' }));
+
+      // Aria-label should now show X
+      expect(screen.getByRole('button', { name: 'Row 2, Column 2: contains X' })).toBeInTheDocument();
+    });
+
+    it('winning cells include winning state in aria-label', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      await user.click(screen.getByText('Start Game'));
+
+      const cells = screen.getAllByRole('button').filter((btn) => btn.textContent === '');
+
+      // X wins with top row
+      await user.click(cells[0]); // X at (0,0)
+      await user.click(cells[3]); // O at (1,0)
+      await user.click(cells[1]); // X at (0,1)
+      await user.click(cells[4]); // O at (1,1)
+      await user.click(cells[2]); // X at (0,2) - wins
+
+      // Winning cells should have special aria-label
+      expect(screen.getByRole('button', { name: 'Row 1, Column 1: contains X, winning cell' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Row 1, Column 2: contains X, winning cell' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Row 1, Column 3: contains X, winning cell' })).toBeInTheDocument();
+    });
+
+    it('game status uses aria-live for screen reader announcements', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      await user.click(screen.getByText('Start Game'));
+
+      const status = screen.getByRole('status');
+      expect(status).toHaveAttribute('aria-live', 'polite');
+    });
+
+    it('button groups have proper grouping with aria-labelledby', () => {
+      render(<App />);
+
+      // Check mode selector has proper grouping
+      const modeGroup = screen.getByRole('group', { name: /game mode/i });
+      expect(modeGroup).toBeInTheDocument();
+    });
+
+    it('all interactive elements are keyboard focusable', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      // Tab through elements to verify keyboard navigation
+      await user.tab();
+      expect(document.activeElement).toBeInstanceOf(HTMLElement);
+
+      // Continue tabbing through mode buttons
+      await user.tab();
+      await user.tab();
+      await user.tab();
+
+      // Should reach Start Game button
+      await user.tab();
+      expect(screen.getByText('Start Game')).toHaveFocus();
+    });
+
+    it('board has grid role with descriptive aria-label', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      await user.click(screen.getByText('Start Game'));
+
+      const grid = screen.getByRole('grid');
+      expect(grid).toHaveAttribute('aria-label', 'Tic-tac-toe game board, 3 by 3 grid');
+    });
+
+    it('difficulty selector has aria-describedby for description', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      await user.click(screen.getByText('Human vs Computer'));
+
+      // Check that the group is described by the description
+      const difficultyGroup = screen.getByRole('group', { name: /ai difficulty/i });
+      expect(difficultyGroup).toHaveAttribute('aria-describedby', 'difficulty-description');
+
+      // Verify description text is present
+      expect(screen.getByText(/blocks and wins/i)).toBeInTheDocument();
     });
   });
 });
