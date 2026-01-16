@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type React from 'react';
 import type { Player, GamePhase } from '../../core/types.ts';
 
@@ -7,7 +8,7 @@ interface GameStatusProps {
   phase: GamePhase;
 }
 
-export function GameStatus({
+export const GameStatus = memo(function GameStatus({
   currentPlayer,
   winner,
   phase,
@@ -46,4 +47,4 @@ export function GameStatus({
       {getStatusMessage()}
     </div>
   );
-}
+});

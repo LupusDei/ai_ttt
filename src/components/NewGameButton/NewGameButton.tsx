@@ -1,10 +1,11 @@
+import { memo } from 'react';
 import type React from 'react';
 
 interface NewGameButtonProps {
   onClick: () => void;
 }
 
-export function NewGameButton({ onClick }: NewGameButtonProps): React.JSX.Element {
+export const NewGameButton = memo(function NewGameButton({ onClick }: NewGameButtonProps): React.JSX.Element {
   return (
     <button
       type="button"
@@ -14,4 +15,4 @@ export function NewGameButton({ onClick }: NewGameButtonProps): React.JSX.Elemen
       New Game
     </button>
   );
-}
+});

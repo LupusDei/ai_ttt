@@ -1,3 +1,4 @@
+import { memo, useCallback } from 'react';
 import type { ReactElement } from 'react';
 import type { GameMode } from '../../core/types';
 
@@ -12,7 +13,11 @@ const modes: { value: GameMode; label: string }[] = [
   { value: 'cvc', label: 'Computer vs Computer' },
 ];
 
-export function ModeSelector({ value, onChange }: ModeSelectorProps): ReactElement {
+export const ModeSelector = memo(function ModeSelector({ value, onChange }: ModeSelectorProps): ReactElement {
+  const handleClick = useCallback(
+    (mode: GameMode): (() => void) => (): void => onChange(mode),
+    [onChange]
+  );
   return (
     <div className="flex flex-col gap-2">
       <span className="text-sm text-gray-400">Game Mode:</span>
@@ -20,7 +25,7 @@ export function ModeSelector({ value, onChange }: ModeSelectorProps): ReactEleme
         <button
           key={mode.value}
           type="button"
-          onClick={() => onChange(mode.value)}
+          onClick={handleClick(mode.value)}
           className={`px-4 py-2 rounded-lg font-bold transition-colors ${
             value === mode.value
               ? 'bg-blue-600 text-white ring-2 ring-blue-400 ring-offset-2 ring-offset-gray-900'
@@ -33,4 +38,4 @@ export function ModeSelector({ value, onChange }: ModeSelectorProps): ReactEleme
       ))}
     </div>
   );
-}
+});

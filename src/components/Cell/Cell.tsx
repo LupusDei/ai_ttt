@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type React from 'react';
 import type { CellValue } from '../../core/types';
 
@@ -8,7 +9,7 @@ export interface CellProps {
   isWinning?: boolean;
 }
 
-export function Cell({ value, onClick, disabled = false, isWinning = false }: CellProps): React.JSX.Element {
+export const Cell = memo(function Cell({ value, onClick, disabled = false, isWinning = false }: CellProps): React.JSX.Element {
   const baseClasses =
     'w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold flex items-center justify-center border-2 border-gray-600 rounded-lg transition-all duration-200 ease-out';
 
@@ -31,4 +32,4 @@ export function Cell({ value, onClick, disabled = false, isWinning = false }: Ce
       {value && <span className="animate-pop-in">{value}</span>}
     </button>
   );
-}
+});
