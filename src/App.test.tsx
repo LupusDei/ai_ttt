@@ -62,7 +62,7 @@ describe('App', () => {
       await user.click(screen.getByText('Start Game'));
 
       // Now in playing - board visible, mode selector gone
-      expect(screen.getByRole('grid', { name: /tic-tac-toe board/i })).toBeInTheDocument();
+      expect(screen.getByRole('grid', { name: /tic-tac-toe game board/i })).toBeInTheDocument();
       expect(screen.queryByText('Human vs Human')).not.toBeInTheDocument();
       expect(screen.getByRole('status')).toHaveTextContent("Player X's turn");
     });
@@ -259,7 +259,7 @@ describe('App', () => {
       fireEvent.click(screen.getByText('Start Game'));
 
       // Game should start successfully
-      expect(screen.getByRole('grid', { name: /tic-tac-toe board/i })).toBeInTheDocument();
+      expect(screen.getByRole('grid', { name: /tic-tac-toe game board/i })).toBeInTheDocument();
     });
   });
 

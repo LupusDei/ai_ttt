@@ -94,6 +94,6 @@ describe('Board', () => {
   it('has accessible grid role', () => {
     render(<Board board={emptyBoard} onCellClick={() => {}} />);
     expect(screen.getByRole('grid')).toBeInTheDocument();
-    expect(screen.getByLabelText('Tic-tac-toe board')).toBeInTheDocument();
+    expect(screen.getByLabelText('Tic-tac-toe game board, 3 by 3 grid')).toBeInTheDocument();
   });
 });
