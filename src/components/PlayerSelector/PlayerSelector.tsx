@@ -20,7 +20,7 @@ export const PlayerSelector = memo(function PlayerSelector({ value, onChange }: 
           onClick={handleClickX}
           className={`px-4 py-2 rounded-lg font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
             value === 'X'
-              ? 'bg-blue-600 text-white ring-2 ring-blue-400 ring-offset-2 ring-offset-gray-900'
+              ? 'bg-blue-600 text-white outline outline-2 outline-offset-2 outline-blue-400'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
           aria-pressed={value === 'X'}
@@ -32,7 +32,7 @@ export const PlayerSelector = memo(function PlayerSelector({ value, onChange }: 
           onClick={handleClickO}
           className={`px-4 py-2 rounded-lg font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
             value === 'O'
-              ? 'bg-blue-600 text-white ring-2 ring-blue-400 ring-offset-2 ring-offset-gray-900'
+              ? 'bg-blue-600 text-white outline outline-2 outline-offset-2 outline-blue-400'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
           aria-pressed={value === 'O'}

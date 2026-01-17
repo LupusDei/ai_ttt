@@ -35,7 +35,7 @@ export const DifficultySelector = memo(function DifficultySelector({
           onClick={handleClickEasy}
           className={`px-4 py-2 rounded-lg font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
             value === 'easy'
-              ? 'bg-blue-600 text-white ring-2 ring-blue-400 ring-offset-2 ring-offset-gray-900'
+              ? 'bg-blue-600 text-white outline outline-2 outline-offset-2 outline-blue-400'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
           aria-pressed={value === 'easy'}
@@ -47,7 +47,7 @@ export const DifficultySelector = memo(function DifficultySelector({
           onClick={handleClickFun}
           className={`px-4 py-2 rounded-lg font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
             value === 'fun'
-              ? 'bg-green-600 text-white ring-2 ring-green-400 ring-offset-2 ring-offset-gray-900'
+              ? 'bg-green-600 text-white outline outline-2 outline-offset-2 outline-green-400'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
           aria-pressed={value === 'fun'}
@@ -59,7 +59,7 @@ export const DifficultySelector = memo(function DifficultySelector({
           onClick={handleClickGod}
           className={`px-4 py-2 rounded-lg font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
             value === 'god'
-              ? 'bg-red-600 text-white ring-2 ring-red-400 ring-offset-2 ring-offset-gray-900'
+              ? 'bg-red-600 text-white outline outline-2 outline-offset-2 outline-red-400'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
           aria-pressed={value === 'god'}

@@ -43,7 +43,7 @@ const COLORS = {
 };
 
 const ROCKET_COUNT = 5;
-const LAUNCH_INTERVAL = 500; // ms between launches
+const LAUNCH_INTERVAL = 250; // ms between launches
 const FLIGHT_DURATION = 2000; // ms to reach burst point
 const BURST_Y = 35; // % from top where burst happens
 

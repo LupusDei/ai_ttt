@@ -3,7 +3,9 @@
     "allow": [
       "Bash(npx playwright install)",
       "Bash(npm run test:e2e:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(lsof:*)",
+      "Bash(npx playwright test:*)"
     ]
   }
 }
