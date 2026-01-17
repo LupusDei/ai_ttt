@@ -29,7 +29,7 @@ export const ModeSelector = memo(function ModeSelector({ value, onChange }: Mode
             onClick={handleClick(mode.value)}
             className={`px-4 py-2 rounded-lg font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
               value === mode.value
-                ? 'bg-blue-600 text-white outline outline-2 outline-offset-2 outline-blue-400'
+                ? 'bg-blue-600 text-white shadow-[0_0_0_3px_#60a5fa]'
                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
             }`}
             aria-pressed={value === mode.value}
