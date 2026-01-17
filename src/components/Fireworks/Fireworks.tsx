@@ -34,19 +34,27 @@ interface FireworksProps {
 const COLORS = {
   X: {
     rocket: '#60a5fa',
-    burst: ['#60a5fa', '#3b82f6', '#93c5fd', '#bfdbfe', '#ffffff', '#818cf8'],
+    burst: [
+      '#60a5fa', '#3b82f6', '#2563eb', '#93c5fd', '#bfdbfe', // Blues
+      '#818cf8', '#a5b4fc', '#c4b5fd', // Purples
+      '#ffffff', '#f0f9ff', '#e0f2fe', // Whites/highlights
+    ],
   },
   O: {
     rocket: '#f87171',
-    burst: ['#f87171', '#ef4444', '#fca5a5', '#fecaca', '#ffffff', '#fb923c'],
+    burst: [
+      '#f87171', '#ef4444', '#dc2626', '#fca5a5', '#fecaca', // Reds
+      '#fb923c', '#fdba74', '#fcd34d', // Oranges/yellows
+      '#ffffff', '#fef2f2', '#fff7ed', // Whites/highlights
+    ],
   },
 };
 
-const ROCKET_COUNT = 5;
-const LAUNCH_INTERVAL = 250; // ms between launches
-const FLIGHT_DURATION = 2000; // ms to reach burst point
-const BURST_Y = 35; // % from top where burst happens
-const START_DELAY = 800; // ms delay after win before fireworks start
+const ROCKET_COUNT = 10;
+const LAUNCH_INTERVAL = 150; // ms between launches (faster)
+const FLIGHT_DURATION = 1500; // ms to reach burst point (faster)
+const BURST_Y = 30; // % from top where burst happens (higher)
+const START_DELAY = 250; // ms delay after win before fireworks start
 
 function generateRockets(winner: 'X' | 'O'): FireworkRocket[] {
   const colors = COLORS[winner];
@@ -61,18 +69,20 @@ function generateRockets(winner: 'X' | 'O'): FireworkRocket[] {
 
 function generateBurstParticles(rocket: FireworkRocket, burstId: number): BurstParticle[] {
   const particles: BurstParticle[] = [];
-  const particleCount = 40;
+  const particleCount = 80; // More particles for bigger bursts
 
   for (let i = 0; i < particleCount; i++) {
-    const angle = (i / particleCount) * 360 + Math.random() * 20;
+    const angle = (i / particleCount) * 360 + Math.random() * 15;
+    // Vary sizes: some large primary particles, many smaller trailing ones
+    const isPrimary = i < particleCount / 3;
     particles.push({
       id: burstId * 100 + i,
       rocketId: rocket.id,
-      x: rocket.x,
-      y: BURST_Y,
+      x: rocket.x + (Math.random() - 0.5) * 2, // Slight spread
+      y: BURST_Y + (Math.random() - 0.5) * 2,
       angle,
-      speed: 40 + Math.random() * 80,
-      size: 4 + Math.random() * 8,
+      speed: isPrimary ? 60 + Math.random() * 100 : 30 + Math.random() * 70,
+      size: isPrimary ? 6 + Math.random() * 10 : 3 + Math.random() * 6,
       color: rocket.burstColors[Math.floor(Math.random() * rocket.burstColors.length)],
     });
   }
@@ -150,33 +160,34 @@ function FireworksInner({ winner }: { winner: 'X' | 'O' }): React.JSX.Element {
 
         return (
           <div key={`rocket-${rocket.id}`} className="firework-rocket-container">
-            {/* Rocket head */}
+            {/* Rocket head - brighter glow */}
             <div
               className="firework-rocket"
               style={{
                 left: `${rocket.x}%`,
                 top: `${currentY}%`,
                 backgroundColor: rocket.color,
-                boxShadow: `0 0 10px 3px ${rocket.color}`,
+                boxShadow: `0 0 15px 5px ${rocket.color}, 0 0 30px 10px ${rocket.color}40`,
               }}
             />
-            {/* Spark trail */}
-            {Array.from({ length: 8 }, (_, i) => {
-              const trailY = currentY + (i + 1) * 2;
-              const opacity = 1 - i / 8;
-              const size = 6 - i * 0.5;
+            {/* Spark trail - more sparks, longer trail */}
+            {Array.from({ length: 12 }, (_, i) => {
+              const trailY = currentY + (i + 1) * 1.8;
+              const opacity = 1 - i / 12;
+              const size = 8 - i * 0.5;
+              const xOffset = (Math.random() - 0.5) * 3;
               return (
                 <div
                   key={`trail-${rocket.id}-${i}`}
                   className="firework-trail-spark"
                   style={{
-                    left: `${rocket.x + (Math.random() - 0.5) * 2}%`,
+                    left: `calc(${rocket.x}% + ${xOffset}px)`,
                     top: `${trailY}%`,
                     width: `${size}px`,
                     height: `${size}px`,
                     opacity,
                     backgroundColor: rocket.color,
-                    boxShadow: `0 0 ${size}px ${size / 2}px ${rocket.color}`,
+                    boxShadow: `0 0 ${size * 1.5}px ${size / 2}px ${rocket.color}`,
                   }}
                 />
               );
@@ -196,7 +207,7 @@ function FireworksInner({ winner }: { winner: 'X' | 'O' }): React.JSX.Element {
             width: `${particle.size}px`,
             height: `${particle.size}px`,
             backgroundColor: particle.color,
-            boxShadow: `0 0 ${particle.size * 2}px ${particle.size / 2}px ${particle.color}`,
+            boxShadow: `0 0 ${particle.size * 2}px ${particle.size}px ${particle.color}, 0 0 ${particle.size * 4}px ${particle.size * 1.5}px ${particle.color}60`,
             '--angle': `${particle.angle}deg`,
             '--speed': `${particle.speed}px`,
           } as React.CSSProperties}
