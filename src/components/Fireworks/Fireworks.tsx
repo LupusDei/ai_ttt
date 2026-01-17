@@ -46,6 +46,7 @@ const ROCKET_COUNT = 5;
 const LAUNCH_INTERVAL = 250; // ms between launches
 const FLIGHT_DURATION = 2000; // ms to reach burst point
 const BURST_Y = 35; // % from top where burst happens
+const START_DELAY = 800; // ms delay after win before fireworks start
 
 function generateRockets(winner: 'X' | 'O'): FireworkRocket[] {
   const colors = COLORS[winner];
@@ -223,8 +224,30 @@ function useFireworksKey(isActive: boolean): number {
 
 export function Fireworks({ isActive, winner }: FireworksProps): React.JSX.Element | null {
   const key = useFireworksKey(isActive);
+  const [showFireworks, setShowFireworks] = useState(false);
 
-  if (!isActive || winner === null) {
+  // Delay showing fireworks after win is revealed
+  useEffect(() => {
+    if (!isActive || winner === null) {
+      // Reset state asynchronously to avoid lint warning
+      const resetTimer = setTimeout(() => {
+        setShowFireworks(false);
+      }, 0);
+      return (): void => {
+        clearTimeout(resetTimer);
+      };
+    }
+
+    const timer = setTimeout(() => {
+      setShowFireworks(true);
+    }, START_DELAY);
+
+    return (): void => {
+      clearTimeout(timer);
+    };
+  }, [isActive, winner]);
+
+  if (!isActive || winner === null || !showFireworks) {
     return null;
   }
 

@@ -6,7 +6,7 @@ import { test, expect, type Page } from "@playwright/test";
 // 3 4 5
 // 6 7 8
 function getCell(page: Page, position: number) {
-  const grid = page.getByRole("grid", { name: /tic-tac-toe board/i });
+  const grid = page.getByRole("grid", { name: /tic-tac-toe game board/i });
   return grid.getByRole("button").nth(position);
 }
 
@@ -35,14 +35,14 @@ test.describe("Human vs Computer Mode", () => {
 
     // Board should be visible
     await expect(
-      page.getByRole("grid", { name: /tic-tac-toe board/i })
+      page.getByRole("grid", { name: /tic-tac-toe game board/i })
     ).toBeVisible();
     // Status should show X's turn (human)
     await expect(page.getByRole("status")).toHaveText("Player X's turn");
 
     // All cells should be empty initially
     await expect(
-      page.getByRole("button", { name: "Empty cell" })
+      page.getByRole("button", { name: /: empty/ })
     ).toHaveCount(9);
   });
 
@@ -68,7 +68,7 @@ test.describe("Human vs Computer Mode", () => {
 
     // Wait for AI to make a move (should see an O appear)
     await expect(
-      page.getByRole("button", { name: "Cell contains O" })
+      page.getByRole("button", { name: /contains O/ })
     ).toBeVisible({ timeout: 5000 });
   });
 
@@ -79,7 +79,7 @@ test.describe("Human vs Computer Mode", () => {
 
     // Wait for AI (X) to make the first move
     await expect(
-      page.getByRole("button", { name: "Cell contains X" })
+      page.getByRole("button", { name: /contains X/ })
     ).toBeVisible({ timeout: 5000 });
 
     // Then it should be O's turn (human)
@@ -93,15 +93,15 @@ test.describe("Human vs Computer Mode", () => {
 
     // Wait for AI (X) to make the first move
     await expect(
-      page.getByRole("button", { name: "Cell contains X" })
+      page.getByRole("button", { name: /contains X/ })
     ).toBeVisible({ timeout: 5000 });
 
     // Human plays at an empty cell
-    await page.getByRole("button", { name: "Empty cell" }).first().click();
+    await page.getByRole("button", { name: /: empty/ }).first().click();
 
     // Should see an O appear
     await expect(
-      page.getByRole("button", { name: "Cell contains O" })
+      page.getByRole("button", { name: /contains O/ })
     ).toBeVisible();
   });
 
@@ -125,7 +125,7 @@ test.describe("Human vs Computer Mode", () => {
     // Start game should still work
     await page.getByRole("button", { name: "Start Game" }).click();
     await expect(
-      page.getByRole("grid", { name: /tic-tac-toe board/i })
+      page.getByRole("grid", { name: /tic-tac-toe game board/i })
     ).toBeVisible();
   });
 
@@ -149,7 +149,7 @@ test.describe("Human vs Computer Mode", () => {
 
       // If it's X's turn (human), make a move
       if (status?.includes("X's turn")) {
-        const emptyCells = page.getByRole("button", { name: "Empty cell" });
+        const emptyCells = page.getByRole("button", { name: /: empty/ });
         const count = await emptyCells.count();
         if (count > 0) {
           await emptyCells.first().click();
@@ -181,7 +181,7 @@ test.describe("Human vs Computer Mode", () => {
       if (status?.includes("wins") || status?.includes("draw")) break;
 
       if (status?.includes("X's turn")) {
-        const emptyCells = page.getByRole("button", { name: "Empty cell" });
+        const emptyCells = page.getByRole("button", { name: /: empty/ });
         const count = await emptyCells.count();
         if (count > 0) {
           await emptyCells.first().click();
@@ -210,7 +210,7 @@ test.describe("Human vs Computer Mode", () => {
       if (status?.includes("wins") || status?.includes("draw")) break;
 
       if (status?.includes("X's turn")) {
-        const emptyCells = page.getByRole("button", { name: "Empty cell" });
+        const emptyCells = page.getByRole("button", { name: /: empty/ });
         const count = await emptyCells.count();
         if (count > 0) {
           await emptyCells.first().click();

@@ -6,7 +6,7 @@ import { test, expect, type Page } from "@playwright/test";
 // 3 4 5
 // 6 7 8
 function getCell(page: Page, position: number) {
-  const grid = page.getByRole("grid", { name: /tic-tac-toe board/i });
+  const grid = page.getByRole("grid", { name: /tic-tac-toe game board/i });
   return grid.getByRole("button").nth(position);
 }
 
@@ -32,7 +32,7 @@ test.describe("Human vs Human Mode", () => {
     await page.getByRole("button", { name: "Start Game" }).click();
 
     // Board should be visible
-    await expect(page.getByRole("grid", { name: /tic-tac-toe board/i })).toBeVisible();
+    await expect(page.getByRole("grid", { name: /tic-tac-toe game board/i })).toBeVisible();
     // Status should show X's turn
     await expect(page.getByRole("status")).toHaveText("Player X's turn");
   });
@@ -53,11 +53,11 @@ test.describe("Human vs Human Mode", () => {
 
     // X plays at position 0
     await getCell(page, 0).click();
-    await expect(page.getByRole("button", { name: "Cell contains X" })).toHaveCount(1);
+    await expect(page.getByRole("button", { name: /contains X/ })).toHaveCount(1);
 
     // O plays at position 1
     await getCell(page, 1).click();
-    await expect(page.getByRole("button", { name: "Cell contains O" })).toHaveCount(1);
+    await expect(page.getByRole("button", { name: /contains O/ })).toHaveCount(1);
   });
 
   test("X wins with top row", async ({ page }) => {
@@ -154,14 +154,14 @@ test.describe("Human vs Human Mode", () => {
     await getCell(page, 2).click(); // X at 2 - wins
 
     // Count empty cells after game
-    const emptyCellsAfterWin = await page.getByRole("button", { name: "Empty cell" }).count();
+    const emptyCellsAfterWin = await page.getByRole("button", { name: /: empty/ }).count();
 
     // Try clicking empty cell after game ends - should not add marks
     // Use force: true since cells are disabled after game ends
     if (emptyCellsAfterWin > 0) {
       await getCell(page, 5).click({ force: true }); // Try to click an empty cell
       // Count should remain the same
-      await expect(page.getByRole("button", { name: "Empty cell" })).toHaveCount(emptyCellsAfterWin);
+      await expect(page.getByRole("button", { name: /: empty/ })).toHaveCount(emptyCellsAfterWin);
     }
   });
 

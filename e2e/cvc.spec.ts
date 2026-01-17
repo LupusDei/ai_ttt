@@ -28,12 +28,12 @@ test.describe("Computer vs Computer Mode", () => {
 
     // Board should be visible
     await expect(
-      page.getByRole("grid", { name: /tic-tac-toe board/i })
+      page.getByRole("grid", { name: /tic-tac-toe game board/i })
     ).toBeVisible();
 
     // AI X should make a move automatically
     await expect(
-      page.getByRole("button", { name: "Cell contains X" })
+      page.getByRole("button", { name: /contains X/ })
     ).toBeVisible({ timeout: 5000 });
   });
 
@@ -60,7 +60,7 @@ test.describe("Computer vs Computer Mode", () => {
 
     // Wait for first move
     await expect(
-      page.getByRole("button", { name: "Cell contains X" })
+      page.getByRole("button", { name: /contains X/ })
     ).toBeVisible({ timeout: 5000 });
 
     // Click pause
@@ -79,7 +79,7 @@ test.describe("Computer vs Computer Mode", () => {
 
     // Wait for first move
     await expect(
-      page.getByRole("button", { name: "Cell contains X" })
+      page.getByRole("button", { name: /contains X/ })
     ).toBeVisible({ timeout: 5000 });
 
     // Pause the game
@@ -88,10 +88,10 @@ test.describe("Computer vs Computer Mode", () => {
 
     // Count moves before resume
     const xCountBefore = await page
-      .getByRole("button", { name: "Cell contains X" })
+      .getByRole("button", { name: /contains X/ })
       .count();
     const oCountBefore = await page
-      .getByRole("button", { name: "Cell contains O" })
+      .getByRole("button", { name: /contains O/ })
       .count();
     const totalBefore = xCountBefore + oCountBefore;
 
@@ -108,10 +108,10 @@ test.describe("Computer vs Computer Mode", () => {
     const status = await page.getByRole("status").textContent();
     if (!status?.includes("wins") && !status?.includes("draw")) {
       const xCountAfter = await page
-        .getByRole("button", { name: "Cell contains X" })
+        .getByRole("button", { name: /contains X/ })
         .count();
       const oCountAfter = await page
-        .getByRole("button", { name: "Cell contains O" })
+        .getByRole("button", { name: /contains O/ })
         .count();
       const totalAfter = xCountAfter + oCountAfter;
       expect(totalAfter).toBeGreaterThanOrEqual(totalBefore);
