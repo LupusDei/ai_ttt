@@ -33,11 +33,12 @@ export const DifficultySelector = memo(function DifficultySelector({
         <button
           type="button"
           onClick={handleClickEasy}
-          className={`px-4 py-2 rounded-lg font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
+          className={`px-4 py-2 rounded-lg font-bold transition-colors ${
             value === 'easy'
-              ? 'bg-blue-600 text-white shadow-[0_0_0_3px_#60a5fa]'
+              ? 'bg-blue-600 text-white'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
+          style={value === 'easy' ? { boxShadow: '0 0 0 3px #60a5fa' } : undefined}
           aria-pressed={value === 'easy'}
         >
           Easy
@@ -45,11 +46,12 @@ export const DifficultySelector = memo(function DifficultySelector({
         <button
           type="button"
           onClick={handleClickFun}
-          className={`px-4 py-2 rounded-lg font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
+          className={`px-4 py-2 rounded-lg font-bold transition-colors ${
             value === 'fun'
-              ? 'bg-green-600 text-white shadow-[0_0_0_3px_#4ade80]'
+              ? 'bg-green-600 text-white'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
+          style={value === 'fun' ? { boxShadow: '0 0 0 3px #4ade80' } : undefined}
           aria-pressed={value === 'fun'}
         >
           Fun
@@ -57,11 +59,12 @@ export const DifficultySelector = memo(function DifficultySelector({
         <button
           type="button"
           onClick={handleClickGod}
-          className={`px-4 py-2 rounded-lg font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
+          className={`px-4 py-2 rounded-lg font-bold transition-colors ${
             value === 'god'
-              ? 'bg-red-600 text-white shadow-[0_0_0_3px_#f87171]'
+              ? 'bg-red-600 text-white'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
+          style={value === 'god' ? { boxShadow: '0 0 0 3px #f87171' } : undefined}
           aria-pressed={value === 'god'}
         >
           God

@@ -18,11 +18,12 @@ export const PlayerSelector = memo(function PlayerSelector({ value, onChange }: 
         <button
           type="button"
           onClick={handleClickX}
-          className={`px-4 py-2 rounded-lg font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
+          className={`px-4 py-2 rounded-lg font-bold transition-colors ${
             value === 'X'
-              ? 'bg-blue-600 text-white shadow-[0_0_0_3px_#60a5fa]'
+              ? 'bg-blue-600 text-white'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
+          style={value === 'X' ? { boxShadow: '0 0 0 3px #60a5fa' } : undefined}
           aria-pressed={value === 'X'}
         >
           Play as X
@@ -30,11 +31,12 @@ export const PlayerSelector = memo(function PlayerSelector({ value, onChange }: 
         <button
           type="button"
           onClick={handleClickO}
-          className={`px-4 py-2 rounded-lg font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
+          className={`px-4 py-2 rounded-lg font-bold transition-colors ${
             value === 'O'
-              ? 'bg-blue-600 text-white shadow-[0_0_0_3px_#60a5fa]'
+              ? 'bg-blue-600 text-white'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
+          style={value === 'O' ? { boxShadow: '0 0 0 3px #60a5fa' } : undefined}
           aria-pressed={value === 'O'}
         >
           Play as O

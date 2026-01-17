@@ -27,11 +27,12 @@ export const ModeSelector = memo(function ModeSelector({ value, onChange }: Mode
             key={mode.value}
             type="button"
             onClick={handleClick(mode.value)}
-            className={`px-4 py-2 rounded-lg font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
+            className={`px-4 py-2 rounded-lg font-bold transition-colors ${
               value === mode.value
-                ? 'bg-blue-600 text-white shadow-[0_0_0_3px_#60a5fa]'
+                ? 'bg-blue-600 text-white'
                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
             }`}
+            style={value === mode.value ? { boxShadow: '0 0 0 3px #60a5fa' } : undefined}
             aria-pressed={value === mode.value}
           >
             {mode.label}
