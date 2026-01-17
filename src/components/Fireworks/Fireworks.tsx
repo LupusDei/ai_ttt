@@ -1,20 +1,29 @@
 import type React from 'react';
-import { useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import './Fireworks.css';
 
-type ParticleType = 'primary' | 'secondary' | 'sparkle' | 'trail';
-
-interface Particle {
+interface FireworkRocket {
   id: number;
+  x: number; // horizontal position (%)
+  launchTime: number; // when it launches (ms from start)
+  color: string;
+  burstColors: string[];
+}
+
+interface ActiveRocket {
+  rocket: FireworkRocket;
+  progress: number; // 0 to 1
+}
+
+interface BurstParticle {
+  id: number;
+  rocketId: number;
   x: number;
   y: number;
-  color: string;
-  size: number;
   angle: number;
   speed: number;
-  rise: number;
-  delay: number;
-  type: ParticleType;
+  size: number;
+  color: string;
 }
 
 interface FireworksProps {
@@ -22,139 +31,202 @@ interface FireworksProps {
   winner: 'X' | 'O' | null;
 }
 
-// Extended color palette with highlights
-const PARTICLE_COLORS = {
-  X: [
-    '#60a5fa', '#3b82f6', '#2563eb', '#93c5fd', '#bfdbfe', // Blues
-    '#818cf8', '#a5b4fc', // Purple highlights
-    '#ffffff', '#f0f9ff', // White sparkles
-  ],
-  O: [
-    '#f87171', '#ef4444', '#dc2626', '#fca5a5', '#fecaca', // Reds
-    '#fb923c', '#fdba74', // Orange highlights
-    '#ffffff', '#fef2f2', // White sparkles
-  ],
+const COLORS = {
+  X: {
+    rocket: '#60a5fa',
+    burst: ['#60a5fa', '#3b82f6', '#93c5fd', '#bfdbfe', '#ffffff', '#818cf8'],
+  },
+  O: {
+    rocket: '#f87171',
+    burst: ['#f87171', '#ef4444', '#fca5a5', '#fecaca', '#ffffff', '#fb923c'],
+  },
 };
 
-function generateParticles(winner: 'X' | 'O'): Particle[] {
-  const colors = PARTICLE_COLORS[winner];
-  const particles: Particle[] = [];
-  let particleId = 0;
+const ROCKET_COUNT = 5;
+const LAUNCH_INTERVAL = 500; // ms between launches
+const FLIGHT_DURATION = 2000; // ms to reach burst point
+const BURST_Y = 35; // % from top where burst happens
 
-  // Create multiple spectacular bursts
-  const numBursts = 8;
+function generateRockets(winner: 'X' | 'O'): FireworkRocket[] {
+  const colors = COLORS[winner];
+  return Array.from({ length: ROCKET_COUNT }, (_, i) => ({
+    id: i,
+    x: 20 + Math.random() * 60, // Random X between 20-80%
+    launchTime: i * LAUNCH_INTERVAL,
+    color: colors.rocket,
+    burstColors: colors.burst,
+  }));
+}
 
-  for (let burst = 0; burst < numBursts; burst++) {
-    // Position bursts around the center area where the status text is
-    const burstX = 25 + Math.random() * 50; // Random X position (25-75%)
-    const burstY = 30 + Math.random() * 25; // Random Y position (30-55%)
-    const burstDelay = burst * 0.5; // Stagger bursts more
+function generateBurstParticles(rocket: FireworkRocket, burstId: number): BurstParticle[] {
+  const particles: BurstParticle[] = [];
+  const particleCount = 40;
 
-    // Primary particles - large, bright, lead the bloom
-    for (let i = 0; i < 25; i++) {
-      const angle = (i / 25) * 360 + Math.random() * 15; // Even spread with variation
-      particles.push({
-        id: particleId++,
-        x: burstX + (Math.random() - 0.5) * 4,
-        y: burstY + (Math.random() - 0.5) * 4,
-        color: colors[Math.floor(Math.random() * 5)], // Main colors
-        size: 8 + Math.random() * 12, // Large: 8-20px
-        angle,
-        speed: 80 + Math.random() * 100,
-        rise: 60 + Math.random() * 80, // Slow vertical rise
-        delay: burstDelay + Math.random() * 0.15,
-        type: 'primary',
-      });
-    }
-
-    // Secondary particles - medium, follow the primary
-    for (let i = 0; i < 40; i++) {
-      const angle = Math.random() * 360;
-      particles.push({
-        id: particleId++,
-        x: burstX + (Math.random() - 0.5) * 6,
-        y: burstY + (Math.random() - 0.5) * 6,
-        color: colors[Math.floor(Math.random() * 7)],
-        size: 5 + Math.random() * 8, // Medium: 5-13px
-        angle,
-        speed: 60 + Math.random() * 80,
-        rise: 40 + Math.random() * 60,
-        delay: burstDelay + 0.1 + Math.random() * 0.2,
-        type: 'secondary',
-      });
-    }
-
-    // Trail particles - create depth and movement
-    for (let i = 0; i < 30; i++) {
-      const angle = Math.random() * 360;
-      particles.push({
-        id: particleId++,
-        x: burstX + (Math.random() - 0.5) * 8,
-        y: burstY + (Math.random() - 0.5) * 8,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        size: 3 + Math.random() * 6, // Small-medium: 3-9px
-        angle,
-        speed: 40 + Math.random() * 70,
-        rise: 50 + Math.random() * 70,
-        delay: burstDelay + 0.2 + Math.random() * 0.3,
-        type: 'trail',
-      });
-    }
-
-    // Sparkle particles - tiny, twinkling, magical
-    for (let i = 0; i < 50; i++) {
-      const angle = Math.random() * 360;
-      particles.push({
-        id: particleId++,
-        x: burstX + (Math.random() - 0.5) * 12,
-        y: burstY + (Math.random() - 0.5) * 10,
-        color: colors[colors.length - 2 + Math.floor(Math.random() * 2)], // White/light colors
-        size: 2 + Math.random() * 4, // Tiny: 2-6px
-        angle,
-        speed: 30 + Math.random() * 50,
-        rise: 30 + Math.random() * 50,
-        delay: burstDelay + Math.random() * 0.5,
-        type: 'sparkle',
-      });
-    }
+  for (let i = 0; i < particleCount; i++) {
+    const angle = (i / particleCount) * 360 + Math.random() * 20;
+    particles.push({
+      id: burstId * 100 + i,
+      rocketId: rocket.id,
+      x: rocket.x,
+      y: BURST_Y,
+      angle,
+      speed: 40 + Math.random() * 80,
+      size: 4 + Math.random() * 8,
+      color: rocket.burstColors[Math.floor(Math.random() * rocket.burstColors.length)],
+    });
   }
 
   return particles;
 }
 
-export function Fireworks({ isActive, winner }: FireworksProps): React.JSX.Element | null {
-  // Generate particles when fireworks become active
-  const particles = useMemo((): Particle[] => {
-    if (isActive && winner) {
-      return generateParticles(winner);
-    }
-    return [];
-  }, [isActive, winner]);
+function FireworksInner({ winner }: { winner: 'X' | 'O' }): React.JSX.Element {
+  const [activeRockets, setActiveRockets] = useState<ActiveRocket[]>([]);
+  const [bursts, setBursts] = useState<BurstParticle[]>([]);
 
-  if (!isActive || !winner || particles.length === 0) {
-    return null;
-  }
+  const rockets = useMemo(() => generateRockets(winner), [winner]);
+  const startTimeRef = useRef<number>(0);
+  const burstTriggeredRef = useRef<Set<number>>(new Set());
+
+  // Handle rocket launches and bursts with animation frame
+  useEffect(() => {
+    let animationId: number;
+    let mounted = true;
+
+    startTimeRef.current = performance.now();
+    burstTriggeredRef.current = new Set();
+
+    const animate = (): void => {
+      if (!mounted) return;
+
+      const startTime = startTimeRef.current;
+      const elapsed = performance.now() - startTime;
+
+      // Update active rockets with their progress
+      const newActiveRockets: ActiveRocket[] = [];
+      const newBursts: BurstParticle[] = [];
+
+      rockets.forEach((rocket) => {
+        const rocketElapsed = elapsed - rocket.launchTime;
+
+        // Rocket is in flight
+        if (rocketElapsed >= 0 && rocketElapsed < FLIGHT_DURATION) {
+          const progress = rocketElapsed / FLIGHT_DURATION;
+          newActiveRockets.push({ rocket, progress });
+        }
+
+        // Rocket just reached burst point
+        if (rocketElapsed >= FLIGHT_DURATION && !burstTriggeredRef.current.has(rocket.id)) {
+          burstTriggeredRef.current.add(rocket.id);
+          newBursts.push(...generateBurstParticles(rocket, rocket.id));
+        }
+      });
+
+      setActiveRockets(newActiveRockets);
+      if (newBursts.length > 0) {
+        setBursts((prev) => [...prev, ...newBursts]);
+      }
+
+      // Continue animation until all fireworks are done
+      const totalDuration = (ROCKET_COUNT - 1) * LAUNCH_INTERVAL + FLIGHT_DURATION + 3000;
+      if (elapsed < totalDuration) {
+        animationId = requestAnimationFrame(animate);
+      }
+    };
+
+    animationId = requestAnimationFrame(animate);
+
+    return (): void => {
+      mounted = false;
+      cancelAnimationFrame(animationId);
+    };
+  }, [rockets]);
 
   return (
     <div className="fireworks-container" aria-hidden="true">
-      {particles.map((particle) => (
+      {/* Rockets in flight */}
+      {activeRockets.map(({ rocket, progress }) => {
+        const currentY = 95 - progress * (95 - BURST_Y); // From 95% to BURST_Y%
+
+        return (
+          <div key={`rocket-${rocket.id}`} className="firework-rocket-container">
+            {/* Rocket head */}
+            <div
+              className="firework-rocket"
+              style={{
+                left: `${rocket.x}%`,
+                top: `${currentY}%`,
+                backgroundColor: rocket.color,
+                boxShadow: `0 0 10px 3px ${rocket.color}`,
+              }}
+            />
+            {/* Spark trail */}
+            {Array.from({ length: 8 }, (_, i) => {
+              const trailY = currentY + (i + 1) * 2;
+              const opacity = 1 - i / 8;
+              const size = 6 - i * 0.5;
+              return (
+                <div
+                  key={`trail-${rocket.id}-${i}`}
+                  className="firework-trail-spark"
+                  style={{
+                    left: `${rocket.x + (Math.random() - 0.5) * 2}%`,
+                    top: `${trailY}%`,
+                    width: `${size}px`,
+                    height: `${size}px`,
+                    opacity,
+                    backgroundColor: rocket.color,
+                    boxShadow: `0 0 ${size}px ${size / 2}px ${rocket.color}`,
+                  }}
+                />
+              );
+            })}
+          </div>
+        );
+      })}
+
+      {/* Burst particles */}
+      {bursts.map((particle) => (
         <div
-          key={particle.id}
-          className={`firework-particle firework-${particle.type}`}
+          key={`burst-${particle.id}`}
+          className="firework-burst-particle"
           style={{
             left: `${particle.x}%`,
             top: `${particle.y}%`,
             width: `${particle.size}px`,
             height: `${particle.size}px`,
             backgroundColor: particle.color,
-            boxShadow: `0 0 ${particle.size * 2}px ${particle.size * 0.5}px ${particle.color}`,
+            boxShadow: `0 0 ${particle.size * 2}px ${particle.size / 2}px ${particle.color}`,
             '--angle': `${particle.angle}deg`,
             '--speed': `${particle.speed}px`,
-            '--rise': `${particle.rise}px`,
-            animationDelay: `${particle.delay}s`,
           } as React.CSSProperties}
         />
       ))}
     </div>
   );
+}
+
+function useFireworksKey(isActive: boolean): number {
+  const [key, setKey] = useState(0);
+  const [prevActive, setPrevActive] = useState(isActive);
+
+  // React-approved pattern: adjust state during render based on prop changes
+  // This is not an effect, so it doesn't trigger the linter warning
+  if (isActive !== prevActive) {
+    setPrevActive(isActive);
+    if (isActive) {
+      setKey((k) => k + 1);
+    }
+  }
+
+  return key;
+}
+
+export function Fireworks({ isActive, winner }: FireworksProps): React.JSX.Element | null {
+  const key = useFireworksKey(isActive);
+
+  if (!isActive || winner === null) {
+    return null;
+  }
+
+  return <FireworksInner key={key} winner={winner} />;
 }
