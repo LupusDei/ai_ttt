@@ -9,3 +9,5 @@ export { DifficultySelector } from './DifficultySelector/index.ts';
 export { GameStatus } from './GameStatus/index.ts';
 export { NewGameButton } from './NewGameButton/index.ts';
 export { Fireworks } from './Fireworks/index.ts';
+export { StatsDisplay } from './StatsDisplay/index.ts';
+export type { StatsDisplayProps } from './StatsDisplay/index.ts';

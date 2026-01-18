@@ -49,3 +49,10 @@ export interface GameState {
   difficulty: AIDifficulty;
   result: GameResult | null;
 }
+
+/** Human player statistics (for Human vs Computer games) */
+export interface PlayerStats {
+  wins: number;
+  losses: number;
+  draws: number;
+}
