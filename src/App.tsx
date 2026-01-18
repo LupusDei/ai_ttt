@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { GameMode, Player, AIDifficulty } from './core/types';
-import { useGame } from './hooks';
+import { useGame, useStats } from './hooks';
 import {
   Board,
   ModeSelector,
@@ -10,6 +10,7 @@ import {
   GameStatus,
   NewGameButton,
   Fireworks,
+  StatsDisplay,
 } from './components';
 import './App.css';
 
@@ -26,6 +27,24 @@ function App(): ReactElement {
     isPaused,
     togglePause,
   } = useGame();
+
+  const { stats, recordResult, resetStats } = useStats();
+  const hasRecordedResult = useRef(false);
+
+  // Record game result when HvC game finishes
+  useEffect(() => {
+    if (isFinished && state.mode === 'hvc' && state.result && !hasRecordedResult.current) {
+      hasRecordedResult.current = true;
+      recordResult(state.result, state.humanPlayer);
+    }
+  }, [isFinished, state.mode, state.result, state.humanPlayer, recordResult]);
+
+  // Reset the recorded flag when starting a new game
+  useEffect(() => {
+    if (state.phase === 'setup') {
+      hasRecordedResult.current = false;
+    }
+  }, [state.phase]);
 
   // Setup form state
   const [selectedMode, setSelectedMode] = useState<GameMode>('hvh');
@@ -95,6 +114,12 @@ function App(): ReactElement {
             >
               Start Game
             </button>
+
+            {selectedMode === 'hvc' && (
+              <div className="mt-4">
+                <StatsDisplay stats={stats} onReset={resetStats} />
+              </div>
+            )}
           </div>
         ) : (
           <div className="flex flex-col gap-4 sm:gap-6 items-center w-full max-w-md px-4">
