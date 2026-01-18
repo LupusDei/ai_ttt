@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { easyStrategy } from './easy.ts';
 import { funStrategy } from './fun.ts';
 import { godStrategy } from './god.ts';
 import { getStrategy } from './index.ts';
@@ -42,6 +43,69 @@ function randomMove(board: BoardGrid): { row: number; col: number } {
   const emptyCells = getEmptyCells(board);
   return emptyCells[Math.floor(Math.random() * emptyCells.length)];
 }
+
+describe('easyStrategy', () => {
+  it('returns a valid move on empty board', () => {
+    const board = createEmptyBoard();
+    const move = easyStrategy.getMove(board, 'X');
+
+    expect(move.row).toBeGreaterThanOrEqual(0);
+    expect(move.row).toBeLessThanOrEqual(2);
+    expect(move.col).toBeGreaterThanOrEqual(0);
+    expect(move.col).toBeLessThanOrEqual(2);
+  });
+
+  it('returns a valid move on partially filled board', () => {
+    const board: BoardGrid = [
+      ['X', 'O', null],
+      [null, 'X', null],
+      ['O', null, null],
+    ];
+    const move = easyStrategy.getMove(board, 'X');
+    const emptyCells = getEmptyCells(board);
+
+    expect(emptyCells).toContainEqual(move);
+  });
+
+  it('always picks randomly - does NOT take winning move', () => {
+    // Easy AI should be pure random, NOT strategic
+    const board: BoardGrid = [
+      ['X', 'X', null],
+      ['O', 'O', null],
+      [null, null, null],
+    ];
+
+    // Run multiple times to verify randomness (not always taking the win)
+    let tookWinningMove = 0;
+    const iterations = 20;
+
+    for (let i = 0; i < iterations; i++) {
+      const move = easyStrategy.getMove(board, 'X');
+      if (move.row === 0 && move.col === 2) {
+        tookWinningMove++;
+      }
+    }
+
+    // With pure random, probability of taking winning move is 1/5 (5 empty cells)
+    // It should NOT always take the winning move (unlike fun/god strategies)
+    expect(tookWinningMove).toBeLessThan(iterations);
+  });
+
+  it('throws error when no valid moves available', () => {
+    const board: BoardGrid = [
+      ['X', 'O', 'X'],
+      ['O', 'X', 'O'],
+      ['O', 'X', 'O'],
+    ];
+
+    expect(() => easyStrategy.getMove(board, 'X')).toThrow('No valid moves available');
+  });
+
+  it('has correct name and difficulty', () => {
+    expect(easyStrategy.name).toBe('Easy AI');
+    expect(easyStrategy.difficulty).toBe('easy');
+  });
+});
 
 describe('funStrategy', () => {
   it('returns a valid move on empty board', () => {
@@ -183,6 +247,11 @@ describe('godStrategy', () => {
 });
 
 describe('getStrategy factory', () => {
+  it('returns easyStrategy for easy difficulty', () => {
+    const strategy = getStrategy('easy');
+    expect(strategy).toBe(easyStrategy);
+  });
+
   it('returns funStrategy for fun difficulty', () => {
     const strategy = getStrategy('fun');
     expect(strategy).toBe(funStrategy);
