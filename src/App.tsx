@@ -11,6 +11,7 @@ import {
   NewGameButton,
   Fireworks,
   StatsDisplay,
+  AnimatedBackground,
 } from './components';
 import './App.css';
 
@@ -83,7 +84,8 @@ function App(): ReactElement {
   };
 
   return (
-    <div className="min-h-screen min-h-dvh w-full bg-gray-900 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
+    <div className="min-h-screen min-h-dvh w-full flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
+      <AnimatedBackground />
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg"
