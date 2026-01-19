@@ -95,6 +95,13 @@ function App(): ReactElement {
           Tic-Tac-Toe
         </h1>
 
+        {/* Stats display - shown when in HvC mode or when stats exist */}
+        {(selectedMode === 'hvc' || state.mode === 'hvc') && (
+          <div className="mb-4 sm:mb-6">
+            <StatsDisplay stats={stats} onReset={resetStats} />
+          </div>
+        )}
+
         {state.phase === 'setup' ? (
           <div className="flex flex-col gap-4 sm:gap-6 items-center w-full max-w-sm px-4">
             <ModeSelector value={selectedMode} onChange={setSelectedMode} />
@@ -114,12 +121,6 @@ function App(): ReactElement {
             >
               Start Game
             </button>
-
-            {selectedMode === 'hvc' && (
-              <div className="mt-4">
-                <StatsDisplay stats={stats} onReset={resetStats} />
-              </div>
-            )}
           </div>
         ) : (
           <div className="flex flex-col gap-4 sm:gap-6 items-center w-full max-w-md px-4">
