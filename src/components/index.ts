@@ -11,3 +11,4 @@ export { NewGameButton } from './NewGameButton/index.ts';
 export { Fireworks } from './Fireworks/index.ts';
 export { StatsDisplay } from './StatsDisplay/index.ts';
 export type { StatsDisplayProps } from './StatsDisplay/index.ts';
+export { AnimatedBackground } from './AnimatedBackground/index.ts';
